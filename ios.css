@@ -1,0 +1,53 @@
+/* Áreas seguras do iPhone (notch / Dynamic Island / barra de início) */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+body.pb-24 {
+  padding-bottom: calc(6rem + var(--sab));
+  padding-left: var(--sal);
+  padding-right: var(--sar);
+}
+@media (min-width: 640px) {
+  body.pb-24 { padding-bottom: calc(2rem + var(--sab)); }
+}
+header.sticky { padding-top: var(--sat); }
+nav[aria-label="Navegação Mobile"] {
+  padding-bottom: calc(0.5rem + var(--sab));
+  padding-left: calc(0.5rem + var(--sal));
+  padding-right: calc(0.5rem + var(--sar));
+}
+#toastContainer { top: calc(4rem + var(--sat)); right: calc(0.75rem + var(--sar)); }
+@media (min-width: 640px) {
+  #toastContainer { right: calc(1.5rem + var(--sar)); }
+}
+#appModal > div { padding-bottom: var(--sab); }
+@media (min-width: 640px) {
+  #appModal > div { padding-bottom: 0; }
+}
+
+/* Dica "Adicionar à Tela de Início" (só aparece no Safari, fora do app instalado) */
+#iosInstallTip {
+  position: fixed; z-index: 40;
+  left: calc(0.75rem + var(--sal)); right: calc(0.75rem + var(--sar));
+  bottom: calc(5.25rem + var(--sab));
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 0.75rem 0.875rem;
+  background: #111c33; border: 1px solid rgba(139, 92, 246, 0.5); border-radius: 1rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  color: #e2e8f0; font-size: 0.8125rem; line-height: 1.4;
+}
+#iosInstallTip strong { color: #c4b5fd; }
+#iosInstallTip button {
+  flex: none; margin-left: auto; width: 1.75rem; height: 1.75rem; border-radius: 0.6rem;
+  background: #0b1120; color: #94a3b8; font-weight: 700;
+}
+@media (min-width: 640px) { #iosInstallTip { bottom: calc(1.5rem + var(--sab)); max-width: 26rem; left: auto; } }
+
+/* Painel fixo do treino em andamento fica logo abaixo do cabeçalho (que cresce com o notch) */
+section.sticky { top: calc(58px + var(--sat)); }
+
+/* App já instalado na Tela de Início: o botão "Salvar no Celular" deixa de aparecer */
+html.is-installed #btnOpenInstallTop { display: none !important; }

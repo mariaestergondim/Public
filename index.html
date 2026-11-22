@@ -1,0 +1,3757 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1120">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Maria Ester Fit — Treino &amp; Nutrição</title>
+
+  <!-- Estilos e fontes locais (funciona offline) -->
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="ios.css">
+  <!-- App da Tela de Início (iPhone) -->
+  <meta name="apple-mobile-web-app-title" content="Maria Ester">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <!-- Ajustes de iPhone: offline, som do descanso, exportar backup, dica de instalação -->
+  <script src="ios.js"></script>
+
+  <style>
+    /* Ajustes leves complementares ao Tailwind para ergonomia mobile às 5h da manhã */
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #0b1120;
+      color: #f1f5f9;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior-y: contain;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeSlideUp 0.2s ease-out forwards;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#0b1120] text-slate-100 antialiased selection:bg-violet-500/30 selection:text-violet-100 pb-24 sm:pb-8">
+
+  <!-- Cabeçalho Fixo Compacto -->
+  <header class="sticky top-0 z-30 bg-[#0b1120]/95 backdrop-blur-md border-b border-slate-800/90">
+    <div class="max-w-4xl mx-auto px-3.5 sm:px-6 py-2.5 flex items-center justify-between gap-2">
+      <!-- Avatar ME + Título -->
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#8b5cf6] to-[#14b8a6] text-[#0b1120] flex items-center justify-center font-black text-sm shadow-lg shadow-violet-500/20 shrink-0">
+          ME
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-sm sm:text-base font-extrabold text-white truncate leading-tight">Maria Ester Fit</h1>
+            <span id="syncDot" class="w-2 h-2 rounded-full bg-[#14b8a6] shrink-0" title="Salvo automaticamente no aparelho"></span>
+          </div>
+          <p class="text-[11px] text-slate-400 truncate leading-tight">Máquinas &amp; Polias • 30 min • Vôlei</p>
+        </div>
+      </div>
+
+      <!-- Ações Rápidas + Abas Desktop -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <button type="button" id="btnOpenInstallTop" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-bold bg-[#111c33] hover:bg-[#172542] text-teal-300 border border-teal-500/35 transition-all active:scale-95" title="Como salvar na tela inicial do celular">
+          <span>📱</span>
+          <span>Salvar no Celular</span>
+        </button>
+
+        <!-- Abas Desktop -->
+        <nav class="hidden sm:flex items-center bg-[#111c33] p-1 rounded-xl border border-slate-800 ml-1" aria-label="Navegação Principal">
+          <button type="button" data-tab="treino" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all">🏋️ Treino</button>
+          <button type="button" data-tab="dieta" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all">🥗 Dieta</button>
+          <button type="button" data-tab="evolucao" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all">📊 Evolução</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal Dinâmico -->
+  <main id="appRoot" class="flex-1 max-w-4xl w-full mx-auto px-3.5 sm:px-6 py-4 sm:py-6">
+    <!-- Renderizado dinamicamente via JavaScript -->
+  </main>
+
+  <!-- Barra Flutuante de Cronômetro de Descanso / Prancha -->
+  <div id="restTimerBar" class="fixed left-3 right-3 sm:left-auto sm:right-6 bottom-20 sm:bottom-6 z-40 hidden">
+    <div class="max-w-sm mx-auto sm:mx-0 bg-[#111c33]/95 backdrop-blur-md border-2 border-[#14b8a6]/80 rounded-2xl p-3 shadow-2xl shadow-teal-950/70 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-xl bg-teal-500/15 border border-teal-500/40 flex items-center justify-center text-teal-300 font-black text-lg">
+          ⏱
+        </div>
+        <div>
+          <div id="restTimerLabel" class="text-[10px] font-bold uppercase tracking-wider text-teal-300">Descanso</div>
+          <div id="restTimerDisplay" class="text-xl font-black text-white tabular-nums leading-none mt-0.5">00:45</div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5">
+        <button type="button" id="btnRestAdd15" class="px-2.5 py-2 rounded-xl text-xs font-extrabold bg-[#0b1120] text-violet-300 border border-slate-700 active:scale-95">+15s</button>
+        <button type="button" id="btnRestSkip" class="px-3 py-2 rounded-xl text-xs font-extrabold bg-[#14b8a6] text-[#0b1120] active:scale-95">Pronto</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navegação Inferior Fixa (Mobile) -->
+  <nav class="sm:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#0b1120]/95 backdrop-blur-md border-t border-slate-800 px-2 py-2" aria-label="Navegação Mobile">
+    <div class="grid grid-cols-3 gap-1.5 max-w-md mx-auto">
+      <button type="button" data-tab="treino" class="nav-tab-btn-mobile flex flex-col items-center justify-center py-2 rounded-xl text-[11px] font-bold transition-all">
+        <span class="text-base leading-none mb-1">🏋️</span>
+        <span>Treino</span>
+      </button>
+      <button type="button" data-tab="dieta" class="nav-tab-btn-mobile flex flex-col items-center justify-center py-2 rounded-xl text-[11px] font-bold transition-all">
+        <span class="text-base leading-none mb-1">🥗</span>
+        <span>Dieta</span>
+      </button>
+      <button type="button" data-tab="evolucao" class="nav-tab-btn-mobile flex flex-col items-center justify-center py-2 rounded-xl text-[11px] font-bold transition-all">
+        <span class="text-base leading-none mb-1">📊</span>
+        <span>Evolução</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Modal / Bottom-Sheet Reutilizável (substitui alert e confirm) -->
+  <div id="appModal" class="fixed inset-0 z-50 hidden items-end sm:items-center justify-center p-0 sm:p-4 bg-black/75 backdrop-blur-xs">
+    <div class="bg-[#111c33] border border-slate-700/90 rounded-t-3xl sm:rounded-2xl max-w-lg w-full max-h-[88vh] flex flex-col shadow-2xl animate-in">
+      <div class="px-5 pt-4 pb-3 border-b border-slate-800 flex items-center justify-between gap-3">
+        <h3 id="modalTitle" class="text-sm sm:text-base font-black text-white leading-snug">Título</h3>
+        <button type="button" id="modalCloseX" class="w-8 h-8 rounded-xl bg-[#0b1120] text-slate-400 hover:text-white flex items-center justify-center font-bold">✕</button>
+      </div>
+      <div id="modalBody" class="p-4 sm:p-5 overflow-y-auto flex-1"></div>
+      <div id="modalFooter" class="px-5 py-3.5 border-t border-slate-800 flex items-center justify-end gap-2 bg-[#0b1120]/60 rounded-b-2xl">
+        <button type="button" id="modalCancelBtn" class="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors">Fechar</button>
+        <button type="button" id="modalConfirmBtn" class="px-4 py-2.5 rounded-xl text-xs font-black text-[#0b1120] bg-[#14b8a6] hover:bg-teal-400 transition-colors">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input oculto para importar Backup JSON -->
+  <input type="file" id="importJsonInput" accept=".json,application/json" class="hidden" />
+
+  <!-- Container de Toasts -->
+  <div id="toastContainer" class="fixed top-16 right-3 sm:right-6 z-50 flex flex-col gap-2 pointer-events-none max-w-xs sm:max-w-sm"></div>
+
+  <script>
+    /**
+     * ============================================================================
+     * MARIA ESTER FIT — TREINO & NUTRIÇÃO
+     * Perfil: 12 anos, Feminino, 164 cm, 59,30 kg, Iniciante, Vôlei 2x/sem,
+     *         4 refeições/dia, 0% suplementos, 100% Máquinas & Polias (+ Prancha)
+     * ============================================================================
+     */
+
+    const STORAGE_KEY = 'maria_ester_fit_v1';
+
+    const MUSCLE_LABELS = {
+      peito: 'Peitoral',
+      costas: 'Dorsais / Costas',
+      ombro_ant: 'Deltóide Anterior',
+      ombro_lat: 'Deltóide Lateral',
+      ombro_post: 'Deltóide Posterior / Manguito',
+      biceps: 'Bíceps',
+      triceps: 'Tríceps',
+      abdomen: 'Abdômen / Core',
+      lombar: 'Lombar / Estabilização',
+      quadriceps: 'Quadríceps',
+      posteriores: 'Posterior de Coxa',
+      gluteos: 'Glúteos',
+      panturrilhas: 'Panturrilhas',
+      abdutores: 'Glúteo Médio / Abdutores',
+      adutores: 'Adutores da Coxa'
+    };
+
+    // Rotação livre A -> B -> C -> D (sem dias fixos da semana)
+    const WORKOUT_ORDER = ['A', 'B', 'C', 'D'];
+
+    // Ficha exata dos 4 treinos (100% Máquinas & Polias + Prancha Isométrica)
+    const WORKOUTS = {
+      A: {
+        id: 'A',
+        name: 'Treino A',
+        focus: 'Inferiores I · Quadríceps, Glúteos & Estabilidade p/ Vôlei',
+        shortFocus: 'Inferiores I',
+        estMin: 27,
+        warmup: '1 série bem leve no Leg Press Horizontal (12 reps) + mobilidade rápida de tornozelo e joelho (~2 min).',
+        exercises: [
+          {
+            id: 'A1',
+            name: 'Leg Press Horizontal (Máquina)',
+            shortName: 'Leg Horizontal',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 60,
+            videoId: 'FkdLVrcPMZY',
+            focusText: 'Quadríceps, Glúteos',
+            tip: 'Pés afastados na largura dos ombros, joelhos alinhados com a ponta dos pés sem fechar para dentro.',
+            primary: ['quadriceps', 'gluteos'],
+            secondary: [],
+            substitutes: [
+              {
+                name: 'Leg Press 45°',
+                shortName: 'Leg Press 45°',
+                videoId: 'DQ4-HXFlKXI',
+                note: 'Mesma mecânica de empurrada de pernas; mantenha lombar totalmente colada no encosto.'
+              },
+              {
+                name: 'Agachamento Hack Máquina',
+                shortName: 'Hack Máquina',
+                videoId: 'x0waoZh8pnk',
+                note: 'Costas firmes no apoio, desça com controle em 2s e suba sem travar totalmente os joelhos.'
+              }
+            ]
+          },
+          {
+            id: 'A2',
+            name: 'Cadeira Extensora',
+            shortName: 'Extensora',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 45,
+            videoId: 'el3oHblB5DM',
+            focusText: 'Quadríceps',
+            tip: 'Ajuste o encosto para o joelho ficar alinhado ao eixo da máquina; segure 1s no topo sem dar tranco.',
+            primary: ['quadriceps'],
+            secondary: [],
+            substitutes: [
+              {
+                name: 'Agachamento Smith Leve',
+                shortName: 'Smith Leve',
+                videoId: '7p_qycgzx4U',
+                note: 'Barra guiada bem leve focando na postura do tronco e alinhamento dos joelhos.'
+              },
+              {
+                name: 'Leg Press Pés Baixos',
+                shortName: 'Leg Pés Baixos',
+                videoId: 'F8m05d2upOA',
+                note: 'Pés um pouco mais baixos na plataforma mantendo os calcanhares sempre apoiados.'
+              }
+            ]
+          },
+          {
+            id: 'A3',
+            name: 'Cadeira Abdutora (Proteção de Joelhos)',
+            shortName: 'Cad. Abdutora',
+            sets: 3, repMin: 15, repMax: 15, repLabel: '15', restSec: 45,
+            videoId: 'f_bdEC-njpg',
+            focusText: 'Glúteo Médio, Estabilidade p/ Vôlei',
+            tip: 'Abra devagar sentindo a lateral do glúteo e segure o retorno sem bater os pesos.',
+            primary: ['abdutores', 'gluteos'],
+            secondary: [],
+            substitutes: [
+              {
+                name: 'Elevação Pélvica Máquina',
+                shortName: 'Elev. Pélvica',
+                videoId: 'pyttaKPHvo0',
+                note: 'Ótima para fortalecer glúteos e dar potência de salto no vôlei.'
+              },
+              {
+                name: 'Glúteo Coice Polia',
+                shortName: 'Coice Polia',
+                videoId: 'XYCCcD0MxN8',
+                note: 'Movimento controlado na polia baixa mantendo a lombar estável.'
+              }
+            ]
+          },
+          {
+            id: 'A4',
+            name: 'Cadeira Adutora',
+            shortName: 'Cad. Adutora',
+            sets: 3, repMin: 15, repMax: 15, repLabel: '15', restSec: 45,
+            videoId: 'C3tldrEVnjI',
+            focusText: 'Adutores da Coxa',
+            tip: 'Coluna apoiada no encosto, movimento contínuo e controlado sem forçar a abertura excessiva.',
+            primary: ['adutores'],
+            secondary: [],
+            substitutes: [
+              {
+                name: 'Leg Press Pés Afastados',
+                shortName: 'Leg Pés Afast.',
+                videoId: '5sQ0HrXwrjU',
+                note: 'Base um pouco mais aberta com pontas dos pés levemente voltadas para fora.'
+              },
+              {
+                name: 'Abdutora Tronco Reto',
+                shortName: 'Abdutora Reta',
+                videoId: '_vDDFsPbubs',
+                note: 'Alternativa de estabilidade de quadril caso a máquina adutora esteja ocupada.'
+              }
+            ]
+          },
+          {
+            id: 'A5',
+            name: 'Panturrilha Sentada na Máquina',
+            shortName: 'Pant. Sentada',
+            sets: 3, repMin: 15, repMax: 15, repLabel: '15', restSec: 45,
+            videoId: '6eJ9EVwazXk',
+            focusText: 'Panturrilha (Aterrissagem de Saltos)',
+            tip: 'Desça alongando bem o calcanhar e suba até o topo com pausa de 1 segundo.',
+            primary: ['panturrilhas'],
+            secondary: [],
+            substitutes: [
+              {
+                name: 'Panturrilha em Pé Máquina',
+                shortName: 'Pant. em Pé',
+                videoId: 'EILF4iyBxSQ',
+                note: 'Joelhos quase estendidos, amplitude máxima devagar sem quicar.'
+              },
+              {
+                name: 'Panturrilha no Leg Press',
+                shortName: 'Pant. Leg Press',
+                videoId: 'Ua7jx6wKyMw',
+                note: 'Apoie a ponta dos pés na base do Leg Press com trava de segurança próxima.'
+              }
+            ]
+          }
+        ]
+      },
+      B: {
+        id: 'B',
+        name: 'Treino B',
+        focus: 'Superiores I · Costas, Ombro Saudável p/ Vôlei & Core',
+        shortFocus: 'Superiores I',
+        estMin: 26,
+        warmup: '1 série leve na Puxada Frontal (12 reps) + rotação suave de ombros (~2 min).',
+        exercises: [
+          {
+            id: 'B1',
+            name: 'Puxada Frontal Aberta (Polia Alta)',
+            shortName: 'Puxada Aberta',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 60,
+            videoId: '4-PsgYmkDsM',
+            focusText: 'Dorsais, Costas',
+            tip: 'Peito aberto, puxe a barra em direção à parte alta do peito levando os cotovelos para baixo.',
+            primary: ['costas'],
+            secondary: ['biceps'],
+            substitutes: [
+              {
+                name: 'Puxada Triângulo Neutra',
+                shortName: 'Puxada Triângulo',
+                videoId: 'MNUxv5ewhFg',
+                note: 'Pegada neutra muito confortável para ombros e postura.'
+              },
+              {
+                name: 'Pulldown Corda Polia',
+                shortName: 'Pulldown Corda',
+                videoId: 'dnZU5bkgfiY',
+                note: 'Braços quase estendidos puxando a corda até a linha da coxa com foco total nas dorsais.'
+              }
+            ]
+          },
+          {
+            id: 'B2',
+            name: 'Remada Máquina Fechada (Apoio no Peito)',
+            shortName: 'Remada Máquina',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 60,
+            videoId: '6fIh5HJ1gDg',
+            focusText: 'Meio das Costas, Postura',
+            tip: 'Mantenha o peito encostado no apoio e puxe fechando as escápulas sem elevar os ombros.',
+            primary: ['costas'],
+            secondary: ['biceps', 'ombro_post'],
+            substitutes: [
+              {
+                name: 'Remada Baixa Triângulo',
+                shortName: 'Remada Baixa',
+                videoId: '3kqjkP7kqVM',
+                note: 'Coluna ereta e peito aberto, puxando o triângulo até o umbigo.'
+              },
+              {
+                name: 'Remada Máquina Neutra',
+                shortName: 'Remada Neutra',
+                videoId: 'Sq7rWvJtzDY',
+                note: 'Apoio firme no peito com foco em fechar as escápulas devagar.'
+              }
+            ]
+          },
+          {
+            id: 'B3',
+            name: 'Face Pull na Polia com Corda (Saúde do Ombro)',
+            shortName: 'Face Pull',
+            sets: 3, repMin: 15, repMax: 15, repLabel: '15', restSec: 45,
+            videoId: 'Wec9Bp6_2P4',
+            focusText: 'Deltóide Posterior, Manguito (Vôlei)',
+            tip: 'Puxe a corda em direção à testa abrindo as mãos e mantendo cotovelos altos; excelente para proteger o ombro nos saques e cortes.',
+            primary: ['ombro_post'],
+            secondary: ['costas'],
+            substitutes: [
+              {
+                name: 'Crucifixo Inverso Máquina',
+                shortName: 'Peck Invertido',
+                videoId: 'kpdf8sK4X3o',
+                note: 'Peito apoiado no banco, abra os braços com carga leve e controle total.'
+              },
+              {
+                name: 'Puxada Rosto Polia',
+                shortName: 'Puxada Rosto',
+                videoId: 'f0UsHyBHhuU',
+                note: 'Variação direta na polia alta com foco em rotação externa segura dos ombros.'
+              }
+            ]
+          },
+          {
+            id: 'B4',
+            name: 'Rosca Direta na Polia Baixa',
+            shortName: 'Rosca Polia',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 45,
+            videoId: '9M-HgpJDA4I',
+            focusText: 'Bíceps',
+            tip: 'Cotovelos colados na lateral do corpo, suba controlando sem balançar o tronco.',
+            primary: ['biceps'],
+            secondary: [],
+            substitutes: [
+              {
+                name: 'Rosca Scott Máquina',
+                shortName: 'Scott Máquina',
+                videoId: 'WH6IgVJeK68',
+                note: 'Braços bem apoiados no banco, evitando qualquer balanço de tronco.'
+              },
+              {
+                name: 'Rosca Martelo Corda Polia',
+                shortName: 'Martelo Corda',
+                videoId: 'cUXEYaGjB-c',
+                note: 'Pegada neutra na corda, fortalece bíceps e antebraços para o vôlei.'
+              }
+            ]
+          },
+          {
+            id: 'B5',
+            name: 'Abdominal na Máquina (Crunch)',
+            shortName: 'Abd. Máquina',
+            sets: 3, repMin: 15, repMax: 15, repLabel: '15', restSec: 45,
+            videoId: 'f783163as1M',
+            focusText: 'Abdômen, Core',
+            tip: 'Solte o ar ao flexionar o tronco contraindo o abdômen sem puxar o pescoço.',
+            primary: ['abdomen'],
+            secondary: [],
+            substitutes: [
+              {
+                name: 'Prancha Isométrica 30-40s',
+                shortName: 'Prancha 30–40s',
+                videoId: 'qNRqGqESAWU',
+                isTimeBased: true,
+                timeMin: 30,
+                timeMax: 40,
+                note: 'Corpo alinhado, abdômen e glúteos firmes por 30 a 40 segundos sem deixar o quadril cair.'
+              },
+              {
+                name: 'Abdominal Supra Polia',
+                shortName: 'Abd. Polia',
+                videoId: 'zp6uK1aE1Lc',
+                note: 'Ajoelhada com corda na polia alta, enrolando o tronco com carga leve.'
+              }
+            ]
+          }
+        ]
+      },
+      C: {
+        id: 'C',
+        name: 'Treino C',
+        focus: 'Inferiores II · Posterior, Glúteos & Impulsão',
+        shortFocus: 'Inferiores II',
+        estMin: 27,
+        warmup: '1 série leve na Cadeira Flexora (12 reps) + elevação de quadril sem carga (~2 min).',
+        exercises: [
+          {
+            id: 'C1',
+            name: 'Cadeira Flexora',
+            shortName: 'Cad. Flexora',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 60,
+            videoId: 'Zss6E3VU6X0',
+            focusText: 'Posterior de Coxa',
+            tip: 'Trave bem a almofada sobre as coxas e puxe o rolo para baixo de forma controlada.',
+            primary: ['posteriores'],
+            secondary: [],
+            substitutes: [
+              {
+                name: 'Mesa Flexora',
+                shortName: 'Mesa Flexora',
+                videoId: '2-ULaRrQa7c',
+                note: 'Deitada com quadril firme contra o banco sem arquear a lombar.'
+              },
+              {
+                name: 'Cadeira Flexora Técnica',
+                shortName: 'Flexora Técnica',
+                videoId: 'c3cng1WqREQ',
+                note: 'Ênfase em pausa de 1s na contração máxima e volta lenta de 2–3s.'
+              }
+            ]
+          },
+          {
+            id: 'C2',
+            name: 'Elevação Pélvica na Máquina',
+            shortName: 'Elev. Pélvica',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 60,
+            videoId: 'pyttaKPHvo0',
+            focusText: 'Glúteo Máximo, Impulsão',
+            tip: 'Queixo levemente voltado para frente, suba contraindo bem os glúteos sem hiperestender a lombar.',
+            primary: ['gluteos'],
+            secondary: ['posteriores'],
+            substitutes: [
+              {
+                name: 'Glúteo Coice na Polia',
+                shortName: 'Coice Polia',
+                videoId: 'ToE6yT5pHZ0',
+                note: 'Substituto prático na polia baixa usando tornozeleira.'
+              },
+              {
+                name: 'Cadeira Abdutora',
+                shortName: 'Cad. Abdutora',
+                videoId: 'f_bdEC-njpg',
+                note: 'Foco em glúteo médio e estabilidade de quadril para saltos.'
+              }
+            ]
+          },
+          {
+            id: 'C3',
+            name: 'Leg Press 45° (Pés Mais Altos)',
+            shortName: 'Leg 45° Alto',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 60,
+            videoId: '5sQ0HrXwrjU',
+            focusText: 'Glúteos, Posterior e Quadríceps',
+            tip: 'Pés mais altos na plataforma, desça sem tirar a lombar do encosto e nunca trave os joelhos no topo.',
+            primary: ['gluteos', 'posteriores'],
+            secondary: ['quadriceps'],
+            substitutes: [
+              {
+                name: 'Leg Press Horizontal',
+                shortName: 'Leg Horizontal',
+                videoId: 'FkdLVrcPMZY',
+                note: 'Pés mais altos na plataforma com ajuste rápido por pino.'
+              },
+              {
+                name: 'Agachamento Smith Guiado',
+                shortName: 'Smith Guiado',
+                videoId: 'LK-ktgN3S1w',
+                note: 'Pés levemente à frente na barra guiada com carga moderada.'
+              }
+            ]
+          },
+          {
+            id: 'C4',
+            name: 'Glúteo Coice na Polia Baixa',
+            shortName: 'Coice Polia',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15 cada lado', restSec: 45,
+            videoId: 'XYCCcD0MxN8',
+            focusText: 'Glúteos',
+            tip: 'Tronco levemente inclinado e estável, leve a perna para trás contraindo o glúteo sem girar a lombar.',
+            primary: ['gluteos'],
+            secondary: ['posteriores'],
+            substitutes: [
+              {
+                name: 'Cadeira Abdutora',
+                shortName: 'Cad. Abdutora',
+                videoId: '_vDDFsPbubs',
+                note: 'Substituta direta em máquina caso a polia ou tornozeleira esteja ocupada.'
+              },
+              {
+                name: 'Elevação Pélvica Máquina',
+                shortName: 'Elev. Pélvica',
+                videoId: '0mtv-b30-W4',
+                note: 'Excelente ativação de glúteo máximo sem exigir equilíbrio unilateral.'
+              }
+            ]
+          },
+          {
+            id: 'C5',
+            name: 'Panturrilha em Pé na Máquina',
+            shortName: 'Pant. em Pé',
+            sets: 3, repMin: 15, repMax: 15, repLabel: '15', restSec: 45,
+            videoId: 'EILF4iyBxSQ',
+            focusText: 'Panturrilha (Salto)',
+            tip: 'Joelhos levemente destravados, amplitude completa devagar.',
+            primary: ['panturrilhas'],
+            secondary: [],
+            substitutes: [
+              {
+                name: 'Panturrilha Sentada Máquina',
+                shortName: 'Pant. Sentada',
+                videoId: '6eJ9EVwazXk',
+                note: 'Foco no sóleo, essencial para amortecer saltos no vôlei.'
+              },
+              {
+                name: 'Panturrilha no Leg Press',
+                shortName: 'Pant. Leg Press',
+                videoId: 'Ua7jx6wKyMw',
+                note: 'Execução estável com as costas totalmente apoiadas.'
+              }
+            ]
+          }
+        ]
+      },
+      D: {
+        id: 'D',
+        name: 'Treino D',
+        focus: 'Superiores II · Peito, Ombros, Tríceps & Core',
+        shortFocus: 'Superiores II',
+        estMin: 26,
+        warmup: '1 série leve no Supino Reto Máquina (12 reps) + rotação escapular (~2 min).',
+        exercises: [
+          {
+            id: 'D1',
+            name: 'Supino Reto na Máquina',
+            shortName: 'Supino Máquina',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 60,
+            videoId: 'dashO-xzD4E',
+            focusText: 'Peitoral, Tríceps',
+            tip: 'Regule o banco para as pegadas ficarem na linha média do peito; ombros encaixados atrás.',
+            primary: ['peito'],
+            secondary: ['triceps', 'ombro_ant'],
+            substitutes: [
+              {
+                name: 'Supino Inclinado Máquina',
+                shortName: 'Supino Inclinado',
+                videoId: 'KNuTH1LRq0Y',
+                note: 'Variação inclinada em máquina guiada, ótimo conforto nos ombros.'
+              },
+              {
+                name: 'Crucifixo Máquina Peck Deck',
+                shortName: 'Peck Deck',
+                videoId: '9BEQWr0u-ac',
+                note: 'Isolamento seguro de peitoral mantendo escápulas apoiadas.'
+              }
+            ]
+          },
+          {
+            id: 'D2',
+            name: 'Desenvolvimento de Ombros na Máquina',
+            shortName: 'Desenv. Máquina',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 60,
+            videoId: 'cAwjHUklmig',
+            focusText: 'Ombros (Deltóide)',
+            tip: 'Lombar apoiada no banco, empurre para cima sem bater os pesos na volta.',
+            primary: ['ombro_ant', 'ombro_lat'],
+            secondary: ['triceps'],
+            substitutes: [
+              {
+                name: 'Elevação Lateral Polia',
+                shortName: 'Elev. Lat. Polia',
+                videoId: 'sKPJdvVvHuI',
+                note: 'Carga bem leve na polia baixa com tensão suave e contínua.'
+              },
+              {
+                name: 'Desenvolvimento Pegada Neutra',
+                shortName: 'Desenv. Neutro',
+                videoId: 'uh0oZorifmM',
+                note: 'Palmas voltadas uma para a outra: posição super confortável para o ombro.'
+              }
+            ]
+          },
+          {
+            id: 'D3',
+            name: 'Crucifixo Inverso na Máquina',
+            shortName: 'Crucif. Inverso',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 45,
+            videoId: 'kpdf8sK4X3o',
+            focusText: 'Posterior de Ombro, Postura',
+            tip: 'Peito apoiado no banco, abra os braços com cotovelos semiflexionados mantendo ombros baixos.',
+            primary: ['ombro_post'],
+            secondary: ['costas'],
+            substitutes: [
+              {
+                name: 'Face Pull Polia Corda',
+                shortName: 'Face Pull',
+                videoId: 'Wec9Bp6_2P4',
+                note: 'Excelente opção na polia para fortalecer o manguito no vôlei.'
+              },
+              {
+                name: 'Remada Máquina Aberta',
+                shortName: 'Remada Aberta',
+                videoId: '14GcffFimi0',
+                note: 'Trabalha parte alta das costas e ombro posterior com apoio de peito.'
+              }
+            ]
+          },
+          {
+            id: 'D4',
+            name: 'Tríceps Corda na Polia Alta',
+            shortName: 'Tríceps Corda',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 45,
+            videoId: 'MMc0xPdeuZI',
+            focusText: 'Tríceps',
+            tip: 'Cotovelos fixos ao lado do tronco, abra levemente a corda no final da extensão.',
+            primary: ['triceps'],
+            secondary: [],
+            substitutes: [
+              {
+                name: 'Tríceps Testa Polia Corda',
+                shortName: 'Testa Polia',
+                videoId: 'ABPq-sfPnP4',
+                note: 'Ótimo controle no cabo mantendo cotovelos alinhados à frente.'
+              },
+              {
+                name: 'Tríceps Francês Polia Corda',
+                shortName: 'Francês Polia',
+                videoId: 'IoawExktILM',
+                note: 'Alongamento suave acima da cabeça sem arquear a lombar.'
+              }
+            ]
+          },
+          {
+            id: 'D5',
+            name: 'Prancha Isométrica (Core & Estabilidade)',
+            shortName: 'Prancha Core',
+            sets: 3, repMin: 30, repMax: 40, repLabel: '30–40s', restSec: 45,
+            isTimeBased: true,
+            timeMin: 30,
+            timeMax: 40,
+            videoId: 'qNRqGqESAWU',
+            focusText: 'Core Completo, Lombar',
+            tip: 'Corpo alinhado da cabeça ao calcanhar, glúteos e abdômen firmes sem deixar o quadril cair.',
+            primary: ['abdomen', 'lombar'],
+            secondary: ['gluteos'],
+            substitutes: [
+              {
+                name: 'Abdominal na Máquina',
+                shortName: 'Abd. Máquina',
+                videoId: 'YSKWgY_47L4',
+                isTimeBased: false,
+                repMin: 12,
+                repMax: 15,
+                note: 'Flexão controlada do tronco na máquina com carga leve.'
+              },
+              {
+                name: 'Abdominal Infra Paralela',
+                shortName: 'Infra Paralela',
+                videoId: 'neYQzepIfFE',
+                isTimeBased: false,
+                repMin: 12,
+                repMax: 15,
+                note: 'Costas apoiadas, eleve os joelhos flexionados em direção ao peito sem balançar.'
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    const ALL_EXERCISES = WORKOUT_ORDER.flatMap(wId =>
+      WORKOUTS[wId].exercises.map(ex => ({ ...ex, workoutId: wId, workoutName: WORKOUTS[wId].name }))
+    );
+
+    // Modos Nutricionais (0% Suplementos, Crescimento Saudável + Massa Magra)
+    const DIET_MODES = {
+      base: {
+        id: 'base',
+        title: 'Dia de Musculação / Base',
+        badge: 'Rotina Padrão',
+        desc: 'Energia equilibrada para crescimento, estudos e construção de massa magra com comida de verdade.',
+        kcal: 1950, p: 103, c: 255, g: 59, waterGoalMl: 2100
+      },
+      volei: {
+        id: 'volei',
+        title: 'Dia de Vôlei (+Energia)',
+        badge: '🏐 +Reforço Pré-Quadra',
+        desc: 'Adiciona energia extra no Lanche da Tarde (Refeição 3) e amplia a meta de água para 2,5 L.',
+        kcal: 2150, p: 105, c: 300, g: 60, waterGoalMl: 2500
+      }
+    };
+
+    // 4 Refeições alinhadas à rotina (04:30 -> 20:30), 0% suplementos, substitutos em 1 toque em todos os itens
+    const MEALS = [
+      {
+        id: 'meal_1',
+        num: 1,
+        time: '04:40 / 06:00',
+        title: 'Café da Manhã (Pré/Pós-Treino)',
+        note: '💡 Se ficar pesado comer tudo às 04:40, coma a banana antes do treino e o restante ao voltar às 06:00.',
+        macros: {
+          base:  { kcal: 510, p: 26, c: 65, g: 16 },
+          volei: { kcal: 510, p: 26, c: 65, g: 16 }
+        },
+        items: [
+          {
+            id: 'm1_carb',
+            tag: 'Carboidrato Base',
+            baseText: '1 Pão francês ou integral (50g)',
+            subs: [
+              { short: 'Cuscuz', text: '3 col. sopa Cuscuz cozido (80g)' },
+              { short: 'Tapioca', text: '1 Tapioca média (60g)' },
+              { short: 'Pão de forma', text: '2 fatias Pão de forma' }
+            ]
+          },
+          {
+            id: 'm1_prot',
+            tag: 'Proteína + Cálcio',
+            baseText: '2 Ovos mexidos + 1 fatia Queijo minas/mussarela (30g)',
+            subs: [
+              { short: 'Ovo + Frango', text: '1 ovo + 50g frango desfiado + 1 fatia queijo' },
+              { short: 'Carne + Queijo', text: '60g carne moída magra + 1 fatia queijo' },
+              { short: 'Queijo + Requeijão', text: '2 fatias queijo + 2 col. sopa requeijão' }
+            ]
+          },
+          {
+            id: 'm1_fruit',
+            tag: 'Fruta + Fibra / Cálcio',
+            baseText: '1 Banana prata + 1 col. sopa Aveia + 150 ml Iogurte natural ou Leite',
+            subs: [
+              { short: 'Mamão + Iogurte', text: '1 fatia Mamão + 1 col. sopa aveia + 150 ml iogurte' },
+              { short: 'Maçã + Vitamina', text: '1 Maçã + 150 ml vitamina de leite com aveia' },
+              { short: 'Uva + Iogurte', text: '1 cacho pequeno Uva + 1 col. aveia + iogurte natural' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'meal_2',
+        num: 2,
+        time: '12:00',
+        title: 'Almoço — Combo Ferro + Vitamina C',
+        note: '🍊 A fruta cítrica junto ao almoço multiplica a absorção de ferro (importante para a Ferritina em 33,5).',
+        macros: {
+          base:  { kcal: 620, p: 34, c: 82, g: 17 },
+          volei: { kcal: 620, p: 34, c: 82, g: 17 }
+        },
+        items: [
+          {
+            id: 'm2_carb',
+            tag: 'Carboidrato',
+            baseText: '5 col. sopa Arroz cozido (150g)',
+            subs: [
+              { short: 'Macarrão', text: '160g Macarrão cozido' },
+              { short: 'Batata', text: '180g Batata inglesa ou doce cozida/airfryer' },
+              { short: 'Purê / Macaxeira', text: '160g Purê de batata ou macaxeira cozida' }
+            ]
+          },
+          {
+            id: 'm2_bean',
+            tag: 'Leguminosa (Ferro)',
+            baseText: '1 concha cheia Feijão carioca ou preto (100g)',
+            subs: [
+              { short: 'Feijão Verde', text: '100g Feijão verde ou de corda' },
+              { short: 'Lentilha / Grão', text: '100g Lentilha ou grão-de-bico cozido' },
+              { short: 'Feijão Macassar', text: '100g Feijão macassar' }
+            ]
+          },
+          {
+            id: 'm2_prot',
+            tag: 'Proteína Rica em Ferro',
+            baseText: '100g Carne bovina magra (acém/patinho moído ou iscas)',
+            subs: [
+              { short: 'Frango', text: '100g Peito de frango grelhado' },
+              { short: 'Peixe', text: '110g Peixe assado ou grelhado' },
+              { short: 'Ovos / Omelete', text: '3 Ovos cozidos ou omelete' }
+            ]
+          },
+          {
+            id: 'm2_veg',
+            tag: 'Salada + Gordura Boa',
+            baseText: 'Salada colorida + legumes à vontade + 1 col. sobremesa Azeite extra virgem',
+            subs: [
+              { short: 'Legumes Vapor', text: 'Legumes no vapor (brócolis/cenoura) + 1 col. sobremesa azeite' },
+              { short: 'Vinagrete', text: 'Vinagrete + folhas verdes + 1 col. sobremesa azeite' },
+              { short: 'Refogados', text: 'Abobrinha e tomate refogados + 1 col. sobremesa azeite' }
+            ]
+          },
+          {
+            id: 'm2_vitc',
+            tag: 'Fruta Cítrica (Vitamina C)',
+            highlight: 'teal',
+            baseText: '1 Laranja ou Tangerina',
+            subs: [
+              { short: 'Abacaxi', text: '1 fatia média de Abacaxi' },
+              { short: 'Kiwi / Morango', text: '1 Kiwi ou 6 Morangos frescos' },
+              { short: 'Acerola / Limão', text: '1 copo suco natural de Acerola ou Limão s/ açúcar' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'meal_3',
+        num: 3,
+        time: '15:30',
+        title: 'Lanche da Tarde / Pré-Vôlei',
+        note: '🎒 Prático para levar para a escola ou comer antes de ir para a quadra.',
+        macros: {
+          base:  { kcal: 370, p: 17, c: 53, g: 10 },
+          volei: { kcal: 570, p: 19, c: 98, g: 11 }
+        },
+        items: [
+          {
+            id: 'm3_dairy',
+            tag: 'Laticínio + Fruta (Cálcio)',
+            baseText: '1 pote Iogurte natural (170g) + 1 Fruta picada + 2 col. sopa Granola/Aveia',
+            subs: [
+              { short: 'Vitamina Leite', text: '200 ml Vitamina de leite com fruta e aveia' },
+              { short: 'Iogurte Grego', text: '1 pote Iogurte grego natural + 1 banana' },
+              { short: 'Queijo + Maçã', text: '1 fatia Queijo branco + 1 maçã + 2 col. aveia' }
+            ]
+          },
+          {
+            id: 'm3_sand',
+            tag: 'Sanduíche Leve',
+            baseText: '2 fatias Pão de forma + 50g Frango desfiado + 1 col. chá Requeijão',
+            subs: [
+              { short: 'Tapioca Queijo', text: '1 Tapioca com 2 fatias queijo + tomate' },
+              { short: 'Pão + Ovo', text: '1 Pão francês com 2 fatias queijo e 1 ovo' },
+              { short: 'Biscoito + Pasta', text: '4 Biscoitos de arroz/cream cracker + pasta de atum ou frango' }
+            ]
+          },
+          {
+            id: 'm3_volei_bonus',
+            tag: '🏐 Reforço Pré-Quadra (Dia de Vôlei)',
+            onlyMode: 'volei',
+            highlight: 'violet',
+            baseText: '+1 Banana ou 1 Pãozinho com 1 col. sopa mel ou doce de leite',
+            subs: [
+              { short: 'Barra + Fruta', text: '1 Barra de cereal integral + 1 fruta' },
+              { short: 'Suco de Uva', text: '200 ml Suco de uva integral' },
+              { short: 'Pão + Geleia', text: '2 fatias Pão com geleia de frutas' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'meal_4',
+        num: 4,
+        time: '19:00',
+        title: 'Jantar — Recuperação & Sono (20:30)',
+        note: '🌙 Refeição nutritiva e leve 1h30 antes de dormir para recuperar os músculos e garantir bom sono.',
+        macros: {
+          base:  { kcal: 450, p: 26, c: 55, g: 16 },
+          volei: { kcal: 450, p: 26, c: 55, g: 16 }
+        },
+        items: [
+          {
+            id: 'm4_prot',
+            tag: 'Proteína',
+            baseText: '100g Peito de frango grelhado ou desfiado',
+            subs: [
+              { short: 'Carne Moída', text: '100g Carne moída magra (acém/patinho)' },
+              { short: 'Filé de Peixe', text: '110g Filé de peixe grelhado ou assado' },
+              { short: 'Ovos + Queijo', text: '2 Ovos + 40g queijo minas' }
+            ]
+          },
+          {
+            id: 'm4_carb',
+            tag: 'Carboidrato',
+            baseText: '150g Batata inglesa/doce ou Cuscuz cozido',
+            subs: [
+              { short: 'Arroz', text: '140g Arroz cozido' },
+              { short: 'Macarrão', text: '150g Macarrão ao molho de tomate caseiro' },
+              { short: 'Macaxeira', text: '150g Macaxeira cozida' }
+            ]
+          },
+          {
+            id: 'm4_veg',
+            tag: 'Vegetais + Gordura Boa',
+            baseText: 'Legumes refogados (brócolis, cenoura, abobrinha) + 1 col. sobremesa Azeite',
+            subs: [
+              { short: 'Sopa Legumes', text: 'Sopa cremosa de legumes + 1 col. sobremesa azeite' },
+              { short: 'Salada Completa', text: 'Salada completa + 1 col. sobremesa azeite' },
+              { short: 'Couve-flor/Vagem', text: 'Mix de couve-flor e vagem + 1 col. sobremesa azeite' }
+            ]
+          },
+          {
+            id: 'm4_calc',
+            tag: 'Complemento de Cálcio (Ossos Fortes)',
+            baseText: '150 ml Leite semidesnatado ou 1 fatia Queijo branco (25g)',
+            subs: [
+              { short: 'Iogurte Natural', text: '1 pote Iogurte natural pequeno' },
+              { short: 'Leite + Cacau', text: '150 ml Leite morno com cacau 100%' },
+              { short: 'Mussarela', text: '1 fatia Queijo mussarela (25g)' }
+            ]
+          }
+        ]
+      }
+    ];
+
+    // Painel Clínico dos Exames Laboratoriais (02/05/2026)
+    const LAB_EXCELLENT = [
+      { name: 'Glicose em Jejum', value: '82,5 mg/dL', ref: '70 – 99 mg/dL', note: 'Excelente' },
+      { name: 'Colesterol Total', value: '154 mg/dL', ref: '< 170 mg/dL', note: 'Desejável' },
+      { name: 'Colesterol HDL', value: '62 mg/dL', ref: '> 45 mg/dL', note: 'Protetor ótimo' },
+      { name: 'Colesterol LDL', value: '76 mg/dL', ref: '< 110 mg/dL', note: 'Ótimo' },
+      { name: 'Triglicerídeos', value: '82 mg/dL', ref: '< 90 mg/dL', note: 'Desejável' },
+      { name: 'TSH / T4 Livre', value: '1,36 · 1,19', ref: '0,63–5,79 · 0,84–1,32', note: 'Tireoide ideal' },
+      { name: 'Hemoglobina', value: '13,8 g/dL', ref: '11,5 – 15,5 g/dL', note: 'Sem anemia' },
+      { name: 'TGO / TGP (Fígado)', value: '17,4 · 12,5 U/L', ref: 'Normal', note: 'Função hepática ok' },
+      { name: 'PCR (Inflamação)', value: '0,10 mg/dL', ref: '< 0,60 mg/dL', note: 'Baixíssimo' },
+      { name: 'Vitamina D', value: '33,2 ng/mL', ref: '20 – 60 ng/mL', note: 'Adequada' }
+    ];
+
+    const LAB_ATTENTION = [
+      {
+        name: 'Ferritina',
+        value: '33,5 ng/mL',
+        badge: 'Foco Nutricional',
+        detail: 'Dentro da faixa, porém merece atenção: priorizar carnes magras + feijão + fruta cítrica (Vitamina C) no almoço para otimizar reservas de ferro.'
+      },
+      {
+        name: 'Vitamina B12',
+        value: '1.020 pg/mL',
+        badge: 'Acima de 906',
+        detail: 'Ligeiramente acima da referência (181–906 pg/mL) — por isso NÃO usar polivitamínicos ou suplementos com B12 sem orientação médica.'
+      },
+      {
+        name: 'Plaquetas',
+        value: '464.000 /mm³',
+        badge: 'Revisar c/ Pediatra',
+        detail: 'Discretamente acima do teto laboratorial (150.000–450.000/mm³). Acompanhar na rotina pediátrica.'
+      },
+      {
+        name: 'Creatinina',
+        value: '0,52 mg/dL',
+        badge: 'Revisar c/ Pediatra',
+        detail: 'Muito próxima do limite inferior de 0,55 mg/dL para 11–12 anos — frequentemente benigno na idade, apenas mostrar à pediatra.'
+      },
+      {
+        name: 'Sumário de Urina (04/05/2026)',
+        value: 'Hemoglobina +',
+        badge: 'Revisar c/ Pediatra',
+        detail: 'Tira reativa com Hemoglobina Positivo +, porém sedimentoscopia com Hemácias raras, Leucócitos raros e Nitrito negativo. Revisar com a pediatra se ainda não avaliado.'
+      }
+    ];
+
+    function createInitialState() {
+      return {
+        version: 1,
+        updatedAt: Date.now(),
+        activeTab: 'treino',
+        selectedWorkoutId: 'A',
+        safetyBannerCollapsed: false,
+        kgStepSize: 1, // 1 kg ou 2.5 kg (iniciante 12 anos começa com ajuste fino de 1 kg)
+        dietMode: 'base',
+        mealSubs: {},
+        preferredExVariant: {},
+        dailyLogs: {},
+        sessionHistory: [], // guarda sessões de 'gym' e 'volleyball'
+        activeSession: null,
+        bodyLogs: [
+          {
+            id: 'body_init_me',
+            date: '2026-11-21',
+            weight: 59.3,
+            height: 164,
+            bf: 28.9,
+            skeletalMuscleKg: 21.9,
+            note: 'Avaliação inicial de referência'
+          }
+        ]
+      };
+    }
+
+    let state = createInitialState();
+
+    const ui = {
+      openGuideId: null,
+      inlineEmbedKey: null, // usado somente em https: sob demanda
+      guidedViewAll: false,
+      expandedHistId: null,
+      chartExId: 'A1',
+      sessionTickInterval: null,
+      restRemainingSec: 0,
+      restInterval: null,
+      modalConfirmCb: null
+    };
+
+    /**
+     * ============================================================================
+     * PERSISTÊNCIA SEGURA EM LOCALSTORAGE
+     * ============================================================================
+     */
+    function mergeStateSafely(incoming) {
+      const base = createInitialState();
+      if (!incoming || typeof incoming !== 'object') return base;
+      const merged = {
+        ...base,
+        ...incoming,
+        mealSubs: { ...base.mealSubs, ...(incoming.mealSubs || {}) },
+        preferredExVariant: { ...base.preferredExVariant, ...(incoming.preferredExVariant || {}) },
+        dailyLogs: { ...base.dailyLogs, ...(incoming.dailyLogs || {}) },
+        sessionHistory: Array.isArray(incoming.sessionHistory) ? incoming.sessionHistory : [],
+        bodyLogs: Array.isArray(incoming.bodyLogs) && incoming.bodyLogs.length > 0 ? incoming.bodyLogs : base.bodyLogs
+      };
+      if (!WORKOUTS[merged.selectedWorkoutId]) merged.selectedWorkoutId = 'A';
+      if (!DIET_MODES[merged.dietMode]) merged.dietMode = 'base';
+      if (merged.kgStepSize !== 1 && merged.kgStepSize !== 2.5) merged.kgStepSize = 1;
+      return merged;
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          state = mergeStateSafely(JSON.parse(raw));
+        }
+      } catch (err) {
+        console.warn('Erro ao ler localStorage:', err);
+        state = createInitialState();
+      }
+    }
+
+    function persistState() {
+      state.updatedAt = Date.now();
+      const dot = document.getElementById('syncDot');
+      if (dot) {
+        dot.classList.remove('bg-[#14b8a6]');
+        dot.classList.add('bg-amber-400');
+      }
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (err) {
+        console.warn('Erro ao salvar localStorage:', err);
+      }
+      setTimeout(() => {
+        if (dot) {
+          dot.classList.remove('bg-amber-400');
+          dot.classList.add('bg-[#14b8a6]');
+        }
+      }, 220);
+    }
+
+    /**
+     * ============================================================================
+     * UTILITÁRIOS (DATAS, SOM, VIBRAÇÃO, MODAIS E TOASTS)
+     * ============================================================================
+     */
+    function getTodayKey() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function getStartOfCurrentWeekMs() {
+      const now = new Date();
+      const day = now.getDay(); // 0=Dom, 1=Seg...
+      const diffToMonday = day === 0 ? -6 : (1 - day);
+      const mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMonday, 0, 0, 0, 0);
+      return mon.getTime();
+    }
+
+    function formatShortDate(isoOrYmd) {
+      if (!isoOrYmd) return '--/--';
+      const part = String(isoOrYmd).slice(0, 10);
+      const [y, m, d] = part.split('-');
+      if (!y || !m || !d) return part;
+      return `${d}/${m}/${y.slice(2)}`;
+    }
+
+    function formatShortDateTime(iso) {
+      if (!iso) return '--';
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return formatShortDate(iso);
+      return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')} às ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    }
+
+    function formatMMSS(totalSec) {
+      const s = Math.max(0, Math.floor(Number(totalSec) || 0));
+      return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function playRestDoneSound() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+        [587.33, 880].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + i * 0.16);
+          gain.gain.setValueAtTime(0.14, now + i * 0.16);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.16 + 0.14);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.16);
+          osc.stop(now + i * 0.16 + 0.15);
+        });
+      } catch (e) {}
+      if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+        try { navigator.vibrate([120, 70, 120]); } catch (e) {}
+      }
+    }
+
+    function showToast(msg, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      const el = document.createElement('div');
+      const style = type === 'error'
+        ? 'bg-rose-600 text-white border-rose-400/40'
+        : type === 'info'
+          ? 'bg-slate-800 text-slate-100 border-slate-600'
+          : 'bg-teal-600 text-white border-teal-300/40';
+      el.className = `pointer-events-auto px-3.5 py-2.5 rounded-xl border text-xs font-bold shadow-xl animate-in ${style}`;
+      el.textContent = msg;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.25s ease';
+        setTimeout(() => el.remove(), 260);
+      }, 2800);
+    }
+
+    function openModal({ title, bodyHtml, confirmText = 'Confirmar', cancelText = 'Fechar', hideConfirm = false, onConfirm = null }) {
+      const modal = document.getElementById('appModal');
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalBody').innerHTML = bodyHtml;
+      const cBtn = document.getElementById('modalConfirmBtn');
+      const xBtn = document.getElementById('modalCancelBtn');
+      cBtn.textContent = confirmText;
+      xBtn.textContent = cancelText;
+      cBtn.classList.toggle('hidden', Boolean(hideConfirm));
+      ui.modalConfirmCb = onConfirm;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('appModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      ui.modalConfirmCb = null;
+    }
+
+    /**
+     * ============================================================================
+     * CRONÔMETROS (DESCANSO + PRANCHA + SESSÃO)
+     * ============================================================================
+     */
+    function startRestTimer(seconds, label = 'Descanso') {
+      stopRestTimer();
+      ui.restRemainingSec = Math.max(5, Number(seconds) || 45);
+      const bar = document.getElementById('restTimerBar');
+      const disp = document.getElementById('restTimerDisplay');
+      const lbl = document.getElementById('restTimerLabel');
+      if (lbl) lbl.textContent = label;
+      if (bar && disp) {
+        disp.textContent = formatMMSS(ui.restRemainingSec);
+        bar.classList.remove('hidden');
+      }
+      ui.restInterval = setInterval(() => {
+        ui.restRemainingSec--;
+        if (disp) disp.textContent = formatMMSS(ui.restRemainingSec);
+        if (ui.restRemainingSec <= 0) {
+          stopRestTimer();
+          playRestDoneSound();
+          showToast(label === 'Prancha' ? '✨ Prancha concluída! Ótima postura!' : '⏱ Descanso concluído! Próxima série!', 'success');
+        }
+      }, 1000);
+    }
+
+    function stopRestTimer() {
+      clearInterval(ui.restInterval);
+      ui.restInterval = null;
+      ui.restRemainingSec = 0;
+      const bar = document.getElementById('restTimerBar');
+      if (bar) bar.classList.add('hidden');
+    }
+
+    function getSessionElapsedSec(s = state.activeSession) {
+      if (!s) return 0;
+      const base = Number(s.accumulatedSec) || 0;
+      if (!s.running || !s.resumedAt) return base;
+      return base + Math.max(0, Math.floor((Date.now() - s.resumedAt) / 1000));
+    }
+
+    function ensureRunningSessionTicker() {
+      clearInterval(ui.sessionTickInterval);
+      if (!state.activeSession || !state.activeSession.running) return;
+      ui.sessionTickInterval = setInterval(() => {
+        if (!state.activeSession || !state.activeSession.running) {
+          clearInterval(ui.sessionTickInterval);
+          return;
+        }
+        const elapsed = getSessionElapsedSec(state.activeSession);
+        const timerEl = document.getElementById('sessionTimerDisplay');
+        const barEl = document.getElementById('sessionTimeBar');
+        if (timerEl) timerEl.textContent = formatMMSS(elapsed);
+        if (barEl) {
+          const pct = Math.min(100, Math.round((elapsed / (30 * 60)) * 100));
+          barEl.style.width = `${pct}%`;
+        }
+      }, 1000);
+    }
+
+    /**
+     * ============================================================================
+     * ROTAÇÃO A -> B -> C -> D, SUBSTITUTOS E PROGRESSÃO SEGURA (12 ANOS)
+     * ============================================================================
+     */
+    function getGymHistory() {
+      return (state.sessionHistory || []).filter(s => s.type === 'gym');
+    }
+
+    function getRecommendedWorkoutId() {
+      const gymHist = getGymHistory();
+      if (gymHist.length === 0) return 'A';
+      const lastId = gymHist[0].workoutId;
+      const idx = WORKOUT_ORDER.indexOf(lastId);
+      return idx === -1 ? 'A' : WORKOUT_ORDER[(idx + 1) % WORKOUT_ORDER.length];
+    }
+
+    function getLastSessionForWorkout(wId) {
+      return getGymHistory().find(s => s.workoutId === wId) || null;
+    }
+
+    function getLastRecordForExercise(exId, preferredName = null) {
+      const gymHist = getGymHistory();
+      // Primeiro tenta achar pelo mesmo nome exato (caso use substituta)
+      if (preferredName) {
+        for (const sess of gymHist) {
+          const found = (sess.exercises || []).find(e => e.exId === exId && e.executedName === preferredName && e.sets.some(st => st.done));
+          if (found) {
+            return {
+              date: sess.completedAt,
+              executedName: found.executedName,
+              isTimeBased: Boolean(found.isTimeBased),
+              sets: found.sets.filter(st => st.done)
+            };
+          }
+        }
+      }
+      // Fallback: último registro daquele slot de exercício
+      for (const sess of gymHist) {
+        const found = (sess.exercises || []).find(e => e.exId === exId && e.sets.some(st => st.done));
+        if (found) {
+          return {
+            date: sess.completedAt,
+            executedName: found.executedName,
+            isTimeBased: Boolean(found.isTimeBased),
+            sets: found.sets.filter(st => st.done)
+          };
+        }
+      }
+      return null;
+    }
+
+    function getExerciseVariants(ex) {
+      const list = [{
+        name: ex.name,
+        shortName: ex.shortName || ex.name,
+        videoId: ex.videoId,
+        note: ex.tip,
+        isTimeBased: Boolean(ex.isTimeBased),
+        repMin: ex.isTimeBased ? (ex.timeMin || 30) : ex.repMin,
+        repMax: ex.isTimeBased ? (ex.timeMax || 40) : ex.repMax,
+        repLabel: ex.repLabel || `${ex.repMin}–${ex.repMax}`,
+        isPrincipal: true
+      }];
+      if (Array.isArray(ex.substitutes)) {
+        ex.substitutes.forEach(s => {
+          const isTime = typeof s.isTimeBased === 'boolean' ? s.isTimeBased : Boolean(ex.isTimeBased);
+          const rMin = isTime ? (s.timeMin || 30) : (s.repMin || ex.repMin || 12);
+          const rMax = isTime ? (s.timeMax || 40) : (s.repMax || ex.repMax || 15);
+          list.push({
+            name: s.name,
+            shortName: s.shortName || s.name,
+            videoId: s.videoId || ex.videoId,
+            note: s.note || ex.tip,
+            isTimeBased: isTime,
+            repMin: rMin,
+            repMax: rMax,
+            repLabel: isTime ? `${rMin}–${rMax}s` : (rMin === rMax ? `${rMax}` : `${rMin}–${rMax}`),
+            isPrincipal: false
+          });
+        });
+      }
+      return list;
+    }
+
+    function getActiveExerciseOption(ex, variantIndex = 0) {
+      const list = getExerciseVariants(ex);
+      const safeIdx = (typeof variantIndex === 'number' && variantIndex >= 0 && variantIndex < list.length) ? variantIndex : 0;
+      return { ...list[safeIdx], index: safeIdx, totalVariants: list.length };
+    }
+
+    /**
+     * Progressão Segura Pediátrica:
+     * Só sugere leve aumento de carga quando completar TODAS as séries em 15 reps (ou teto) com boa postura.
+     */
+    function getSafeProgressionSuggestion(ex, activeOpt, lastRec) {
+      if (activeOpt.isTimeBased) {
+        if (!lastRec || !lastRec.sets.length) {
+          return {
+            type: 'init',
+            label: '🛡️ Postura Primeiro',
+            text: `Comece segurando ${activeOpt.repMin}s bem alinhada (sem deixar o quadril cair) e evolua aos poucos até ${activeOpt.repMax}s.`
+          };
+        }
+        const allMax = lastRec.sets.length >= ex.sets && lastRec.sets.every(st => Number(st.reps) >= activeOpt.repMax);
+        return allMax
+          ? { type: 'up', label: '✨ Excelente Controle', text: `Você completou ${activeOpt.repMax}s em todas! Mantenha 40s perfeitos focando em respiração calma e abdômen firme.` }
+          : { type: 'keep', label: '🎯 Evolução Gradual', text: `Tente manter +2 a +5 segundos com postura impecável até alcançar ${activeOpt.repMax}s em todas.` };
+      }
+
+      const targetMax = activeOpt.repMax || 15;
+      if (!lastRec || !lastRec.sets || lastRec.sets.length === 0) {
+        return {
+          type: 'init',
+          label: '🛡️ Estreia Segura',
+          text: `Use carga leve/moderada para fazer ${activeOpt.repLabel} reps controladas (2s descida / 1s subida) deixando 2–3 reps de sobra.`
+        };
+      }
+
+      const allHitMax = lastRec.sets.length >= ex.sets && lastRec.sets.every(st => Number(st.reps) >= targetMax);
+      const maxKg = Math.max(...lastRec.sets.map(st => Number(st.kg) || 0));
+
+      if (allHitMax && maxKg > 0) {
+        return {
+          type: 'up',
+          label: '⬆ Leve Aumento Seguro',
+          text: `Você fechou ${targetMax} reps em todas! Se a postura esteve perfeita, suba apenas +1 a +2,5 kg (ou +1 placa leve) e faça ${activeOpt.repMin} reps limpas.`
+        };
+      }
+      return {
+        type: 'keep',
+        label: '🎯 Consolidar Técnica',
+        text: `Mantenha ${maxKg > 0 ? maxKg + ' kg' : 'a mesma placa'} e busque melhorar a postura ou somar +1 rep limpa até fechar ${targetMax} em todas.`
+      };
+    }
+
+    function getTodayDietLog() {
+      const key = getTodayKey();
+      if (!state.dailyLogs[key]) {
+        state.dailyLogs[key] = { waterMl: 0, mealsDone: {} };
+      }
+      return state.dailyLogs[key];
+    }
+
+    function getWeeklyCounts() {
+      const startMs = getStartOfCurrentWeekMs();
+      const hist = state.sessionHistory || [];
+      let gym = 0;
+      let volleyball = 0;
+      hist.forEach(s => {
+        const t = new Date(s.completedAt).getTime();
+        if (!isNaN(t) && t >= startMs) {
+          if (s.type === 'volleyball') volleyball++;
+          else gym++;
+        }
+      });
+      return { gym, volleyball };
+    }
+
+    /**
+     * ============================================================================
+     * SESSÃO GUIADA (INICIAR, PAUSAR, FINALIZAR) + REGISTRO DE VÔLEI
+     * ============================================================================
+     */
+    function startGuidedSession(workoutId) {
+      const workout = WORKOUTS[workoutId];
+      if (!workout) return;
+
+      const exercisesDraft = workout.exercises.map(ex => {
+        const prefIdx = Number(state.preferredExVariant?.[ex.id]) || 0;
+        const activeOpt = getActiveExerciseOption(ex, prefIdx);
+        const lastRec = getLastRecordForExercise(ex.id, activeOpt.name);
+
+        const sets = Array.from({ length: ex.sets }, (_, idx) => {
+          const prevSet = lastRec?.sets?.[idx] || lastRec?.sets?.[lastRec.sets.length - 1];
+          const defaultKg = activeOpt.isTimeBased ? 0 : (prevSet && prevSet.kg !== '' && prevSet.kg !== undefined ? Number(prevSet.kg) : '');
+          const defaultReps = prevSet && prevSet.reps !== '' && prevSet.reps !== undefined && Boolean(lastRec.isTimeBased) === Boolean(activeOpt.isTimeBased)
+            ? Number(prevSet.reps)
+            : activeOpt.repMin;
+          return { kg: defaultKg, reps: defaultReps, done: false };
+        });
+
+        return {
+          exId: ex.id,
+          variantIndex: prefIdx,
+          usedSubstitute: prefIdx > 0,
+          sets
+        };
+      });
+
+      state.selectedWorkoutId = workoutId;
+      state.activeSession = {
+        workoutId,
+        startedAt: new Date().toISOString(),
+        resumedAt: Date.now(),
+        accumulatedSec: 0,
+        running: true,
+        currentExIndex: 0,
+        effort: 'Moderado', // 'Fácil' | 'Moderado' | 'Pesado'
+        notes: '',
+        exercises: exercisesDraft
+      };
+
+      ui.openGuideId = null;
+      ui.inlineEmbedKey = null;
+      ui.guidedViewAll = false;
+      ensureRunningSessionTicker();
+      persistState();
+      renderApp();
+      showToast(`▶ ${workout.name} iniciado! Postura bonita e controle!`, 'success');
+    }
+
+    function toggleSessionPause() {
+      const s = state.activeSession;
+      if (!s) return;
+      if (s.running) {
+        s.accumulatedSec = getSessionElapsedSec(s);
+        s.running = false;
+        s.resumedAt = null;
+        clearInterval(ui.sessionTickInterval);
+      } else {
+        s.running = true;
+        s.resumedAt = Date.now();
+        ensureRunningSessionTicker();
+      }
+      persistState();
+      renderApp();
+    }
+
+    function cancelActiveSession() {
+      openModal({
+        title: 'Descartar treino em andamento?',
+        bodyHtml: '<p class="text-xs text-slate-300 leading-relaxed">As séries marcadas nesta sessão atual serão apagadas, mantendo todo o histórico anterior salvo.</p>',
+        confirmText: 'Sim, descartar',
+        cancelText: 'Continuar treinando',
+        onConfirm: () => {
+          clearInterval(ui.sessionTickInterval);
+          stopRestTimer();
+          state.activeSession = null;
+          persistState();
+          renderApp();
+          showToast('Sessão descartada.', 'info');
+        }
+      });
+    }
+
+    function finishAndSaveSession() {
+      const s = state.activeSession;
+      if (!s) return;
+      const workout = WORKOUTS[s.workoutId];
+      if (!workout) return;
+
+      const durationSec = getSessionElapsedSec(s);
+      let totalSetsDone = 0;
+      let totalVolumeKg = 0;
+
+      const recordedExercises = workout.exercises.map((ex, idx) => {
+        const draftEx = s.exercises[idx];
+        const vIdx = typeof draftEx.variantIndex === 'number' ? draftEx.variantIndex : 0;
+        const chosenOpt = getActiveExerciseOption(ex, vIdx);
+        const cleanSets = draftEx.sets.map(st => {
+          const kgNum = Number(st.kg) || 0;
+          const repsNum = Number(st.reps) || 0;
+          if (st.done) {
+            totalSetsDone++;
+            if (!chosenOpt.isTimeBased) {
+              totalVolumeKg += kgNum * repsNum;
+            }
+          }
+          return { kg: kgNum, reps: repsNum, done: Boolean(st.done) };
+        });
+        return {
+          exId: ex.id,
+          originalName: ex.name,
+          executedName: chosenOpt.name,
+          variantIndex: vIdx,
+          usedSubstitute: vIdx > 0,
+          isTimeBased: Boolean(chosenOpt.isTimeBased),
+          sets: cleanSets
+        };
+      });
+
+      if (totalSetsDone === 0) {
+        showToast('Marque pelo menos 1 série concluída antes de finalizar.', 'error');
+        return;
+      }
+
+      const newRecord = {
+        id: 'gym_' + Date.now(),
+        type: 'gym',
+        workoutId: s.workoutId,
+        workoutName: workout.name,
+        workoutFocus: workout.focus,
+        startedAt: s.startedAt,
+        completedAt: new Date().toISOString(),
+        durationSec,
+        totalSetsDone,
+        totalSetsPlanned: workout.exercises.reduce((acc, e) => acc + e.sets, 0),
+        totalVolumeKg: Math.round(totalVolumeKg),
+        effort: s.effort || 'Moderado',
+        notes: (s.notes || '').trim(),
+        exercises: recordedExercises
+      };
+
+      clearInterval(ui.sessionTickInterval);
+      stopRestTimer();
+
+      state.sessionHistory.unshift(newRecord);
+      state.activeSession = null;
+      const nextRecId = getRecommendedWorkoutId();
+      state.selectedWorkoutId = nextRecId;
+      persistState();
+      renderApp();
+
+      const effortBadge = newRecord.effort === 'Fácil'
+        ? 'bg-teal-500/20 text-teal-300 border-teal-500/40'
+        : newRecord.effort === 'Pesado'
+          ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+          : 'bg-violet-500/20 text-violet-300 border-violet-500/40';
+
+      openModal({
+        title: `🎉 ${newRecord.workoutName} Concluído!`,
+        bodyHtml: `
+          <div class="space-y-3.5">
+            <div class="grid grid-cols-3 gap-2 text-center">
+              <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-3">
+                <div class="text-[10px] font-bold uppercase text-slate-400">Duração</div>
+                <div class="text-lg font-black text-white tabular-nums mt-0.5">${formatMMSS(newRecord.durationSec)}</div>
+              </div>
+              <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-3">
+                <div class="text-[10px] font-bold uppercase text-slate-400">Séries</div>
+                <div class="text-lg font-black text-teal-400 tabular-nums mt-0.5">${newRecord.totalSetsDone}/${newRecord.totalSetsPlanned}</div>
+              </div>
+              <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-3">
+                <div class="text-[10px] font-bold uppercase text-slate-400">Volume</div>
+                <div class="text-lg font-black text-violet-300 tabular-nums mt-0.5">${newRecord.totalVolumeKg.toLocaleString('pt-BR')} kg</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between bg-[#0b1120] border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs">
+              <span class="font-bold text-slate-400">Sensação de esforço:</span>
+              <span class="px-2.5 py-0.5 rounded-full font-extrabold border ${effortBadge}">${escapeHtml(newRecord.effort)}</span>
+            </div>
+
+            ${newRecord.effort === 'Pesado' ? `
+              <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/35 text-amber-200 text-xs leading-relaxed">
+                🛡️ <strong>Lembrete seguro:</strong> se o treino pareceu pesado demais, na próxima sessão mantenha a mesma carga (ou reduza 1 placa) para manter sempre 2–3 reps de sobra com técnica perfeita.
+              </div>
+            ` : ''}
+
+            <button type="button" id="btnShareJustSaved" class="w-full py-3 px-4 rounded-xl text-xs font-black bg-[#0b1120] hover:bg-slate-900 text-teal-300 border border-teal-500/40 flex items-center justify-center gap-2 active:scale-95">
+              <span>📤</span>
+              <span>Compartilhar Resumo do Treino</span>
+            </button>
+
+            <div class="p-3 rounded-xl bg-[#0b1120] border border-slate-800 flex items-center justify-between gap-2">
+              <div>
+                <div class="text-[10px] font-bold uppercase text-slate-400">Próximo Sugerido na Fila</div>
+                <div class="text-xs sm:text-sm font-extrabold text-white">${WORKOUTS[nextRecId].name} — ${WORKOUTS[nextRecId].shortFocus}</div>
+              </div>
+              <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#8b5cf6] text-white">${nextRecId}</span>
+            </div>
+          </div>
+        `,
+        confirmText: 'Ver Evolução',
+        cancelText: 'Fechar',
+        onConfirm: () => switchTab('evolucao')
+      });
+
+      const shareBtn = document.getElementById('btnShareJustSaved');
+      if (shareBtn) shareBtn.addEventListener('click', () => shareSessionSummary(newRecord));
+    }
+
+    function openLogVolleyballModal() {
+      let chosenEffort = 'Moderado';
+      openModal({
+        title: '🏐 Registrar Treino de Vôlei',
+        bodyHtml: `
+          <div class="space-y-3.5 text-xs">
+            <p class="text-slate-300 leading-relaxed">
+              Registre sua aula/treino de vôlei para somar na meta semanal (<strong>2 vôleis + 4 musculações</strong>).
+            </p>
+            <div class="grid grid-cols-2 gap-2.5">
+              <div>
+                <label for="vDurInp" class="block text-[11px] font-bold text-slate-400 mb-1">Duração (minutos)</label>
+                <input id="vDurInp" type="number" inputmode="numeric" value="40" min="10" max="180" class="w-full px-3 py-2.5 rounded-xl bg-[#0b1120] border border-slate-700 text-sm font-black text-white tabular-nums focus:outline-none focus:border-violet-500" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-400 mb-1">Sensação de esforço</label>
+                <div class="grid grid-cols-3 gap-1" id="vEffortGroup">
+                  ${['Fácil', 'Moderado', 'Pesado'].map(ef => `
+                    <button type="button" data-veff="${ef}" class="py-2.5 rounded-xl text-[11px] font-bold border transition-all ${
+                      ef === 'Moderado'
+                        ? 'bg-violet-500 text-white border-violet-400'
+                        : 'bg-[#0b1120] text-slate-300 border-slate-700'
+                    }">${ef}</button>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+            <div>
+              <label for="vNoteInp" class="block text-[11px] font-bold text-slate-400 mb-1">Observação (opcional)</label>
+              <input id="vNoteInp" type="text" placeholder="Ex.: Treino de saque, manchete e jogo..." class="w-full px-3 py-2.5 rounded-xl bg-[#0b1120] border border-slate-700 text-xs text-white focus:outline-none focus:border-violet-500" />
+            </div>
+            <div class="p-2.5 rounded-xl bg-violet-500/10 border border-violet-500/30 text-violet-200 text-[11px]">
+              💡 <strong>Dica:</strong> nos dias de vôlei, ative o modo <strong>"Dia de Vôlei (+Energia)"</strong> na aba Dieta para liberar o reforço pré-quadra!
+            </div>
+          </div>
+        `,
+        confirmText: 'Salvar Vôlei',
+        cancelText: 'Cancelar',
+        onConfirm: () => {
+          const mins = Math.max(10, Number(document.getElementById('vDurInp')?.value) || 40);
+          const note = (document.getElementById('vNoteInp')?.value || '').trim();
+          state.sessionHistory.unshift({
+            id: 'vol_' + Date.now(),
+            type: 'volleyball',
+            workoutId: 'V',
+            workoutName: 'Treino de Vôlei',
+            workoutFocus: 'Quadra · Agilidade, Saltos & Fundamentos',
+            completedAt: new Date().toISOString(),
+            durationSec: mins * 60,
+            effort: chosenEffort,
+            notes: note
+          });
+          persistState();
+          renderApp();
+          showToast(`🏐 Treino de Vôlei (${mins} min) registrado!`, 'success');
+        }
+      });
+
+      document.querySelectorAll('[data-veff]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          chosenEffort = btn.dataset.veff;
+          document.querySelectorAll('[data-veff]').forEach(b => {
+            const act = b.dataset.veff === chosenEffort;
+            b.className = `py-2.5 rounded-xl text-[11px] font-bold border transition-all ${
+              act ? 'bg-violet-500 text-white border-violet-400' : 'bg-[#0b1120] text-slate-300 border-slate-700'
+            }`;
+          });
+        });
+      });
+    }
+
+    /**
+     * ============================================================================
+     * MAPA MUSCULAR ANATÔMICO EM SVG (FOCO + AUXILIARES)
+     * ============================================================================
+     */
+    function renderMuscleMapSVG(primary = [], secondary = []) {
+      const fillFor = (key) => {
+        if (primary.includes(key)) return '#8b5cf6'; // Roxo-violeta foco
+        if (secondary.includes(key)) return '#14b8a6'; // Turquesa auxiliar
+        return '#1e293b';
+      };
+
+      return `
+        <div class="bg-[#111c33] border border-slate-800 rounded-xl p-2.5 flex flex-col items-center justify-center shrink-0 sm:w-44">
+          <div class="flex items-center justify-center gap-3">
+            <!-- Vista Frontal -->
+            <svg viewBox="0 0 100 185" class="w-16 h-28" aria-label="Mapa Muscular Frontal">
+              <circle cx="50" cy="18" r="10" fill="#334155"/>
+              <ellipse cx="27" cy="40" rx="8" ry="7" fill="${fillFor('ombro_ant') !== '#1e293b' ? fillFor('ombro_ant') : fillFor('ombro_lat')}"/>
+              <ellipse cx="73" cy="40" rx="8" ry="7" fill="${fillFor('ombro_ant') !== '#1e293b' ? fillFor('ombro_ant') : fillFor('ombro_lat')}"/>
+              <path d="M33 35 Q50 32 67 35 L65 55 Q50 58 35 55 Z" fill="${fillFor('peito')}"/>
+              <rect x="38" y="57" width="24" height="32" rx="6" fill="${fillFor('abdomen')}"/>
+              <rect x="18" y="47" width="10" height="28" rx="5" fill="${fillFor('biceps')}"/>
+              <rect x="72" y="47" width="10" height="28" rx="5" fill="${fillFor('biceps')}"/>
+              <rect x="15" y="77" width="8" height="24" rx="4" fill="#334155"/>
+              <rect x="77" y="77" width="8" height="24" rx="4" fill="#334155"/>
+              <path d="M35 92 L48 92 L46 138 L34 138 Z" fill="${fillFor('quadriceps')}"/>
+              <path d="M52 92 L65 92 L66 138 L54 138 Z" fill="${fillFor('quadriceps')}"/>
+              <path d="M46 95 L54 95 L52 125 L48 125 Z" fill="${fillFor('adutores')}"/>
+              <rect x="35" y="141" width="10" height="34" rx="4" fill="#334155"/>
+              <rect x="55" y="141" width="10" height="34" rx="4" fill="#334155"/>
+            </svg>
+
+            <!-- Vista Posterior -->
+            <svg viewBox="0 0 100 185" class="w-16 h-28" aria-label="Mapa Muscular Posterior">
+              <circle cx="50" cy="18" r="10" fill="#334155"/>
+              <ellipse cx="27" cy="40" rx="8" ry="7" fill="${fillFor('ombro_post') !== '#1e293b' ? fillFor('ombro_post') : fillFor('ombro_lat')}"/>
+              <ellipse cx="73" cy="40" rx="8" ry="7" fill="${fillFor('ombro_post') !== '#1e293b' ? fillFor('ombro_post') : fillFor('ombro_lat')}"/>
+              <path d="M32 35 L68 35 L62 72 L38 72 Z" fill="${fillFor('costas')}"/>
+              <rect x="40" y="72" width="20" height="14" rx="4" fill="${fillFor('lombar')}"/>
+              <rect x="18" y="47" width="10" height="28" rx="5" fill="${fillFor('triceps')}"/>
+              <rect x="72" y="47" width="10" height="28" rx="5" fill="${fillFor('triceps')}"/>
+              <rect x="15" y="77" width="8" height="24" rx="4" fill="#334155"/>
+              <rect x="77" y="77" width="8" height="24" rx="4" fill="#334155"/>
+              <ellipse cx="42" cy="94" rx="10" ry="10" fill="${fillFor('gluteos') !== '#1e293b' ? fillFor('gluteos') : fillFor('abdutores')}"/>
+              <ellipse cx="58" cy="94" rx="10" ry="10" fill="${fillFor('gluteos') !== '#1e293b' ? fillFor('gluteos') : fillFor('abdutores')}"/>
+              <rect x="34" y="106" width="13" height="33" rx="6" fill="${fillFor('posteriores')}"/>
+              <rect x="53" y="106" width="13" height="33" rx="6" fill="${fillFor('posteriores')}"/>
+              <ellipse cx="40" cy="156" rx="6.5" ry="15" fill="${fillFor('panturrilhas')}"/>
+              <ellipse cx="60" cy="156" rx="6.5" ry="15" fill="${fillFor('panturrilhas')}"/>
+            </svg>
+          </div>
+          <div class="flex items-center gap-3 text-[10px] font-semibold text-slate-400 mt-1.5">
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#8b5cf6]"></span>Foco</span>
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#14b8a6]"></span>Auxiliar</span>
+          </div>
+        </div>
+      `;
+    }
+
+    /**
+     * ============================================================================
+     * CARD DE VÍDEO DO YOUTUBE (ZERO ERRO 153 EM ARQUIVO LOCAL)
+     * - Exibe sempre miniatura oficial + botão Play direto no app/site do YouTube.
+     * - Somente em https: oferece botão opcional "Assistir aqui dentro" com youtube-nocookie.
+     * ============================================================================
+     */
+    function renderVideoShowcaseCard(ex, activeOpt) {
+      const videoId = activeOpt.videoId;
+      const isHttps = window.location.protocol === 'https:';
+      const embedKey = `${ex.id}:${activeOpt.index}`;
+      const showInlineIframe = isHttps && ui.inlineEmbedKey === embedKey;
+
+      if (showInlineIframe) {
+        return `
+          <div class="space-y-2">
+            <div class="aspect-video w-full rounded-xl overflow-hidden bg-black border border-slate-700">
+              <iframe
+                class="w-full h-full"
+                src="https://www.youtube-nocookie.com/embed/${videoId}?rel=0"
+                title="Execução: ${escapeHtml(activeOpt.name)}"
+                frameborder="0"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="flex items-center justify-between gap-2">
+              <button type="button" data-close-inline-vid="1" class="px-3 py-1.5 rounded-lg text-[11px] font-bold bg-[#111c33] text-slate-300 border border-slate-700">
+                ← Voltar à capa
+              </button>
+              <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg text-[11px] font-bold bg-rose-600/20 text-rose-300 border border-rose-500/35">
+                Abrir no App YouTube ↗
+              </a>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="space-y-2">
+          <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener noreferrer" class="group relative block aspect-video w-full rounded-xl overflow-hidden bg-gradient-to-br from-slate-900 via-[#111c33] to-violet-950/60 border border-slate-700/90">
+            <img
+              src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg"
+              alt="Demonstração: ${escapeHtml(activeOpt.name)}"
+              onerror="this.style.display='none'"
+              class="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-300" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0b1120]/90 via-black/30 to-black/15 flex flex-col items-center justify-center p-3 text-center">
+              <div class="w-14 h-14 rounded-full bg-rose-600/95 text-white flex items-center justify-center shadow-2xl shadow-rose-950/80 ring-4 ring-white/15 group-active:scale-95 transition-transform">
+                <svg class="w-7 h-7 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <span class="mt-2.5 px-3 py-1 rounded-full bg-[#0b1120]/85 border border-white/15 text-[11px] font-bold text-white shadow">
+                ▶ Assistir "${escapeHtml(activeOpt.shortName)}" no YouTube ↗
+              </span>
+            </div>
+          </a>
+
+          ${isHttps ? `
+            <div class="flex justify-end">
+              <button type="button" data-open-inline-vid="${embedKey}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-[#111c33] hover:bg-slate-800 text-teal-300 border border-teal-500/35 active:scale-95">
+                <span>🎬</span>
+                <span>Assistir aqui dentro</span>
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function renderExerciseGuideAccordion(ex, variantIndex = 0) {
+      const activeOpt = getActiveExerciseOption(ex, variantIndex);
+      const primaryNames = ex.primary.map(k => MUSCLE_LABELS[k] || k);
+      const secondaryNames = ex.secondary.map(k => MUSCLE_LABELS[k] || k);
+
+      return `
+        <div class="bg-[#0b1120] border border-slate-700/80 rounded-2xl p-3.5 space-y-3 animate-in">
+          ${renderVideoShowcaseCard(ex, activeOpt)}
+
+          <div class="flex flex-col sm:flex-row gap-3">
+            ${renderMuscleMapSVG(ex.primary, ex.secondary)}
+            <div class="flex-1 space-y-2 text-xs">
+              <div class="flex flex-wrap gap-1.5">
+                ${primaryNames.map(n => `<span class="px-2 py-0.5 rounded-md bg-violet-500/15 text-violet-300 border border-violet-500/35 font-bold text-[11px]">${n}</span>`).join('')}
+                ${secondaryNames.map(n => `<span class="px-2 py-0.5 rounded-md bg-teal-500/15 text-teal-300 border border-teal-500/35 font-semibold text-[11px]">${n}</span>`).join('')}
+              </div>
+
+              <div class="bg-[#111c33] border border-slate-800 rounded-xl p-2.5 leading-relaxed">
+                <strong class="text-teal-300">🎯 Foco:</strong>
+                <span class="text-slate-200">${escapeHtml(ex.focusText)}</span>
+              </div>
+
+              <div class="bg-[#111c33] border border-slate-800 rounded-xl p-2.5 leading-relaxed">
+                <strong class="text-violet-300">✨ Dica de Execução Segura:</strong>
+                <span class="text-slate-200">${escapeHtml(activeOpt.note)}</span>
+              </div>
+
+              <div class="bg-amber-500/10 border border-amber-500/25 rounded-xl p-2.5 leading-relaxed text-amber-100">
+                <strong class="text-amber-300">⏱ Ritmo:</strong>
+                <span>2s na descida / 1s na subida — pare sempre com 2 a 3 repetições de sobra.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /**
+     * ============================================================================
+     * ABA 1: TREINO (LOBBY + MODO GUIADO + SUBSTITUTAS EM 1 TOQUE)
+     * ============================================================================
+     */
+    function renderInlineExerciseSubStrip(ex, activeIdx, mode, refKey) {
+      const variants = getExerciseVariants(ex);
+      return `
+        <div class="pt-2 border-t border-slate-800/80 space-y-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">🔄 Máquinas equivalentes (toque p/ trocar):</span>
+            <button type="button" data-open-ex-sub="${mode}:${refKey}" class="text-[10px] font-bold text-teal-300 hover:underline shrink-0">Ver detalhes / Substitutos</button>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            ${variants.map((v, idx) => {
+              const selected = idx === activeIdx;
+              return `
+                <button type="button" data-quick-ex-sub="${mode}:${refKey}:${idx}" class="px-2.5 py-1.5 rounded-lg text-[11px] font-bold border transition-all active:scale-95 ${
+                  selected
+                    ? (idx === 0
+                        ? 'bg-violet-500/20 text-violet-200 border-violet-400'
+                        : 'bg-teal-500/20 text-teal-200 border-teal-400')
+                    : 'bg-[#111c33] text-slate-400 border-slate-800 hover:border-slate-600 hover:text-slate-200'
+                }">
+                  ${selected ? '✓ ' : ''}${idx === 0 ? 'Padrão' : escapeHtml(v.shortName)}
+                </button>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSafetyBanner() {
+      const collapsed = Boolean(state.safetyBannerCollapsed);
+      return `
+        <section class="bg-amber-500/10 border border-amber-500/35 rounded-2xl overflow-hidden">
+          <button type="button" id="btnToggleSafety" class="w-full px-3.5 py-2.5 flex items-center justify-between gap-2 text-left">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="text-sm shrink-0">🛡️</span>
+              <span class="text-xs font-extrabold text-amber-300 truncate">Modo Iniciante Seguro (12 anos)</span>
+            </div>
+            <span class="text-[11px] font-bold text-amber-300/80 shrink-0">${collapsed ? 'Mostrar ▼' : 'Recolher ▲'}</span>
+          </button>
+          ${!collapsed ? `
+            <div class="px-3.5 pb-3 text-xs text-amber-100/90 leading-relaxed border-t border-amber-500/20 pt-2">
+              Foco em <strong>postura perfeita</strong>, <strong>12–15 repetições controladas</strong> (2s descida / 1s subida) deixando sempre <strong>2 a 3 repetições de sobra</strong> (nunca ir até a falha máxima).
+            </div>
+          ` : ''}
+        </section>
+      `;
+    }
+
+    function renderTreinoTab() {
+      if (state.activeSession) {
+        return renderGuidedSessionView();
+      }
+      return renderWorkoutLobbyView();
+    }
+
+    function renderWorkoutLobbyView() {
+      const recId = getRecommendedWorkoutId();
+      const recWorkout = WORKOUTS[recId];
+      const selectedWorkout = WORKOUTS[state.selectedWorkoutId] || recWorkout;
+      const lastGym = getGymHistory()[0] || null;
+      const lastSelected = getLastSessionForWorkout(selectedWorkout.id);
+      const weekCounts = getWeeklyCounts();
+
+      return `
+        <div class="space-y-4 animate-in">
+          <!-- Banner de Segurança Pediátrica -->
+          ${renderSafetyBanner()}
+
+          <!-- Card Próximo Sugerido na Fila -->
+          <section class="bg-gradient-to-br from-[#111c33] via-[#111c33] to-violet-950/45 border border-violet-500/40 rounded-2xl p-4 sm:p-5 space-y-3.5 shadow-lg">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <div class="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-violet-300 bg-violet-500/15 border border-violet-500/35 px-2.5 py-0.5 rounded-full">
+                  <span>✨ Próximo Sugerido na Fila</span>
+                </div>
+                <h2 class="text-lg sm:text-xl font-black text-white mt-1.5">${recWorkout.name} — ${recWorkout.shortFocus}</h2>
+                <p class="text-xs text-slate-400 mt-0.5 leading-snug">
+                  ${lastGym
+                    ? `Última musculação: <strong class="text-slate-200">${lastGym.workoutName}</strong> em ${formatShortDateTime(lastGym.completedAt)}`
+                    : 'Sequência livre A → B → C → D sem dias fixos da semana.'}
+                </p>
+              </div>
+              <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#8b5cf6] to-[#14b8a6] text-[#0b1120] font-black text-xl flex items-center justify-center shrink-0 shadow-md">
+                ${recId}
+              </div>
+            </div>
+
+            <button type="button" data-start-workout="${recId}" class="w-full py-3.5 px-5 rounded-xl text-sm font-black bg-gradient-to-r from-[#8b5cf6] to-[#14b8a6] hover:brightness-110 text-[#0b1120] shadow-lg shadow-violet-950/50 flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+              <span>▶</span>
+              <span>Iniciar ${recWorkout.name} Guiado (~${recWorkout.estMin} min)</span>
+            </button>
+          </section>
+
+          <!-- Seletor Livre A / B / C / D + Registro Rápido de Vôlei -->
+          <section class="space-y-2.5">
+            <div class="flex items-center justify-between px-1">
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Escolher Treino (Sem Dia Fixo)</h3>
+              <span class="text-[11px] font-semibold text-teal-300">Semana: ${weekCounts.gym}/4 acad · ${weekCounts.volleyball}/2 vôlei</span>
+            </div>
+
+            <div class="grid grid-cols-4 gap-2">
+              ${WORKOUT_ORDER.map(id => {
+                const w = WORKOUTS[id];
+                const isSel = id === selectedWorkout.id;
+                const isRec = id === recId;
+                const lastW = getLastSessionForWorkout(id);
+                return `
+                  <button type="button" data-select-workout="${id}" class="relative p-2.5 rounded-xl border-2 text-center transition-all active:scale-95 ${
+                    isSel
+                      ? 'bg-violet-500/15 border-[#8b5cf6] text-white'
+                      : 'bg-[#111c33] border-slate-800 text-slate-300 hover:border-slate-700'
+                  }">
+                    ${isRec ? '<span class="absolute -top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-[#14b8a6] ring-2 ring-[#0b1120]" title="Próximo na fila"></span>' : ''}
+                    <div class="text-base font-black ${isSel ? 'text-violet-300' : 'text-white'}">${id}</div>
+                    <div class="text-[10px] font-semibold text-slate-400 truncate mt-0.5">${w.shortFocus}</div>
+                    <div class="text-[9px] text-slate-500 mt-0.5">${lastW ? formatShortDate(lastW.completedAt) : 'Novo'}</div>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- Botão Rápido: Registrar Treino de Vôlei -->
+            <button type="button" id="btnLogVolleyball" class="w-full py-3 px-4 rounded-xl bg-[#111c33] hover:bg-[#172542] border border-teal-500/40 text-teal-200 text-xs sm:text-sm font-extrabold flex items-center justify-between gap-2 transition-all active:scale-[0.99]">
+              <span class="flex items-center gap-2">
+                <span class="text-base">🏐</span>
+                <span>Registrar Treino de Vôlei (40 min)</span>
+              </span>
+              <span class="text-[11px] font-black px-2 py-0.5 rounded-lg bg-teal-500/20 text-teal-300">${weekCounts.volleyball}/2 sem</span>
+            </button>
+          </section>
+
+          <!-- Prévia do Treino Selecionado com Substitutos Visíveis -->
+          <section class="bg-[#111c33] border border-slate-800 rounded-2xl p-4 space-y-3.5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800">
+              <div>
+                <h3 class="text-base font-black text-white">${selectedWorkout.name} · ${selectedWorkout.focus}</h3>
+                <p class="text-[11px] text-slate-400 mt-0.5">
+                  ${lastSelected
+                    ? `Última execução: ${formatShortDateTime(lastSelected.completedAt)} · ${formatMMSS(lastSelected.durationSec)} · Esforço: ${lastSelected.effort || 'Moderado'}`
+                    : 'Ainda sem execução salva para este treino.'}
+                </p>
+              </div>
+
+              ${selectedWorkout.id !== recId ? `
+                <button type="button" data-start-workout="${selectedWorkout.id}" class="px-4 py-2.5 rounded-xl text-xs font-black bg-[#8b5cf6] text-white shrink-0 active:scale-95">
+                  ▶ Iniciar ${selectedWorkout.name}
+                </button>
+              ` : ''}
+            </div>
+
+            <div class="bg-[#0b1120] border border-amber-500/25 rounded-xl p-3 text-xs text-slate-300 leading-relaxed">
+              <strong class="text-amber-400">🔥 Aquecimento (~2 min):</strong> ${selectedWorkout.warmup}
+            </div>
+
+            <div class="space-y-3">
+              ${selectedWorkout.exercises.map((ex, i) => {
+                const prefIdx = Number(state.preferredExVariant?.[ex.id]) || 0;
+                const activeOpt = getActiveExerciseOption(ex, prefIdx);
+                const lastRec = getLastRecordForExercise(ex.id, activeOpt.name);
+                const guideOpen = ui.openGuideId === ex.id;
+                const lastSummary = lastRec
+                  ? lastRec.sets.map(st => activeOpt.isTimeBased ? `${st.reps}s` : `${st.kg}kg×${st.reps}`).join(' · ')
+                  : 'Sem registro anterior';
+
+                return `
+                  <div class="bg-[#0b1120]/90 border ${prefIdx > 0 ? 'border-teal-500/45' : 'border-slate-800'} rounded-xl p-3.5 space-y-2.5">
+                    <div class="flex items-start justify-between gap-2">
+                      <div class="min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap">
+                          <span class="w-6 h-6 rounded-lg bg-slate-800 text-violet-300 text-xs font-black flex items-center justify-center shrink-0">${i + 1}</span>
+                          <h4 class="text-sm font-extrabold text-white leading-snug">${escapeHtml(activeOpt.name)}</h4>
+                          ${prefIdx > 0 ? '<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300">Substituta ativa</span>' : ''}
+                        </div>
+                        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-[11px] text-slate-400 pl-8">
+                          <span class="font-bold text-violet-300">${ex.sets}× ${activeOpt.repLabel}</span>
+                          <span>⏱ ${ex.restSec}s</span>
+                          <span class="text-teal-300/90">Último: ${lastSummary}</span>
+                        </div>
+                      </div>
+                      <button type="button" data-toggle-guide="${ex.id}" class="px-2.5 py-1.5 rounded-lg text-[11px] font-bold border shrink-0 transition-all active:scale-95 ${
+                        guideOpen
+                          ? 'bg-[#8b5cf6] text-white border-violet-400'
+                          : 'bg-[#111c33] text-teal-300 border-slate-700 hover:border-teal-500/50'
+                      }">
+                        🎥 ${guideOpen ? 'Fechar' : 'Vídeo'}
+                      </button>
+                    </div>
+
+                    <!-- Faixa Inline de Substitutas em 1 Toque -->
+                    ${renderInlineExerciseSubStrip(ex, prefIdx, 'lobby', ex.id)}
+
+                    ${guideOpen ? renderExerciseGuideAccordion(ex, prefIdx) : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </section>
+        </div>
+      `;
+    }
+
+    function renderGuidedSessionView() {
+      const s = state.activeSession;
+      const workout = WORKOUTS[s.workoutId];
+      const elapsedSec = getSessionElapsedSec(s);
+      const timePct = Math.min(100, Math.round((elapsedSec / (30 * 60)) * 100));
+
+      let totalSets = 0;
+      let doneSets = 0;
+      s.exercises.forEach(ex => {
+        ex.sets.forEach(st => {
+          totalSets++;
+          if (st.done) doneSets++;
+        });
+      });
+
+      const currentExIdx = Math.max(0, Math.min(workout.exercises.length - 1, s.currentExIndex || 0));
+
+      return `
+        <div class="space-y-4 animate-in">
+          <!-- Barra Superior Fixa da Sessão Ativa -->
+          <section class="sticky top-[58px] z-20 bg-[#111c33]/95 backdrop-blur-md border border-violet-500/45 rounded-2xl p-3.5 space-y-2.5 shadow-xl">
+            <div class="flex items-center justify-between gap-2">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full ${s.running ? 'bg-[#14b8a6] animate-pulse' : 'bg-amber-400'}"></span>
+                  <span class="text-xs font-black uppercase tracking-wider text-violet-300">${workout.name} em andamento</span>
+                </div>
+                <p class="text-[11px] text-slate-400 truncate mt-0.5">${workout.shortFocus} · Meta 30:00</p>
+              </div>
+
+              <div class="flex items-center gap-1.5 shrink-0">
+                <span id="sessionTimerDisplay" class="px-2.5 py-1.5 rounded-xl bg-[#0b1120] border border-slate-700 text-sm sm:text-base font-black text-white tabular-nums">${formatMMSS(elapsedSec)}</span>
+                <button type="button" id="btnPauseSession" class="px-2.5 py-2 rounded-xl text-xs font-bold bg-[#0b1120] text-slate-200 border border-slate-700 active:scale-95" title="Pausar/Retomar">
+                  ${s.running ? '⏸' : '▶'}
+                </button>
+                <button type="button" id="btnTopFinishQuick" class="px-2.5 py-2 rounded-xl text-xs font-black bg-[#14b8a6] text-[#0b1120] active:scale-95" title="Finalizar treino">
+                  ✔ Salvar
+                </button>
+                <button type="button" id="btnCancelSession" class="px-2 py-2 rounded-xl text-xs font-bold bg-rose-500/15 text-rose-300 border border-rose-500/35 active:scale-95" title="Descartar sessão">
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-[11px] font-semibold text-slate-400">
+                <span>Séries concluídas: <strong class="text-teal-300">${doneSets}/${totalSets}</strong></span>
+                <button type="button" id="btnToggleKgStep" class="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-[#0b1120] text-violet-300 border border-violet-500/35">
+                  Passo carga: ±${state.kgStepSize} kg
+                </button>
+              </div>
+              <div class="w-full h-2 bg-[#0b1120] rounded-full overflow-hidden">
+                <div id="sessionTimeBar" class="h-full bg-gradient-to-r from-[#8b5cf6] to-[#14b8a6] transition-all duration-500" style="width: ${timePct}%"></div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-2 pt-0.5">
+              <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                ${workout.exercises.map((ex, idx) => {
+                  const exDone = s.exercises[idx].sets.every(st => st.done);
+                  const active = !ui.guidedViewAll && idx === currentExIdx;
+                  return `
+                    <button type="button" data-jump-ex="${idx}" class="w-9 h-9 rounded-xl text-xs font-black border-2 shrink-0 transition-all ${
+                      active
+                        ? 'bg-[#8b5cf6] text-white border-violet-300'
+                        : exDone
+                          ? 'bg-teal-500/20 text-teal-300 border-teal-500/50'
+                          : 'bg-[#0b1120] text-slate-300 border-slate-700'
+                    }">${exDone ? '✓' : idx + 1}</button>
+                  `;
+                }).join('')}
+              </div>
+
+              <button type="button" id="btnToggleGuidedAll" class="px-3 py-2 rounded-xl text-[11px] font-bold bg-[#0b1120] text-teal-300 border border-slate-700 shrink-0 active:scale-95">
+                ${ui.guidedViewAll ? '1 por vez' : 'Ver todos'}
+              </button>
+            </div>
+          </section>
+
+          <!-- Exercício(s) da Sessão -->
+          <div class="space-y-4">
+            ${ui.guidedViewAll
+              ? workout.exercises.map((ex, idx) => renderGuidedExerciseCard(ex, idx, s.exercises[idx], workout.exercises.length)).join('')
+              : renderGuidedExerciseCard(workout.exercises[currentExIdx], currentExIdx, s.exercises[currentExIdx], workout.exercises.length)
+            }
+          </div>
+
+          ${!ui.guidedViewAll ? `
+            <div class="grid grid-cols-2 gap-2.5">
+              <button type="button" id="btnPrevEx" ${currentExIdx === 0 ? 'disabled' : ''} class="py-3 rounded-xl text-xs font-extrabold bg-[#111c33] border border-slate-700 text-slate-200 disabled:opacity-35 active:scale-95">
+                ← Exercício Anterior
+              </button>
+              <button type="button" id="btnNextEx" ${currentExIdx >= workout.exercises.length - 1 ? 'disabled' : ''} class="py-3 rounded-xl text-xs font-extrabold bg-[#111c33] border border-violet-500/45 text-violet-300 disabled:opacity-35 active:scale-95">
+                Próximo Exercício →
+              </button>
+            </div>
+          ` : ''}
+
+          <!-- Sensação de Esforço + Observações + Finalizar -->
+          <section class="bg-[#111c33] border border-slate-800 rounded-2xl p-4 space-y-3.5">
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-300">Como você sentiu o esforço deste treino?</label>
+              <div class="grid grid-cols-3 gap-2">
+                ${[
+                  { id: 'Fácil', emoji: '😊', sub: 'Bem leve' },
+                  { id: 'Moderado', emoji: '💪', sub: 'Ideal (2–3 sobra)' },
+                  { id: 'Pesado', emoji: '🔥', sub: 'Exigente' }
+                ].map(ef => {
+                  const act = (s.effort || 'Moderado') === ef.id;
+                  return `
+                    <button type="button" data-sess-effort="${ef.id}" class="p-2.5 rounded-xl border-2 text-center transition-all active:scale-95 ${
+                      act
+                        ? 'bg-violet-500/20 border-[#8b5cf6] text-white'
+                        : 'bg-[#0b1120] border-slate-800 text-slate-400 hover:border-slate-700'
+                    }">
+                      <div class="text-base leading-none">${ef.emoji}</div>
+                      <div class="text-xs font-extrabold mt-1">${ef.id}</div>
+                      <div class="text-[10px] text-slate-400">${ef.sub}</div>
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <div>
+              <label for="sessionNotesInput" class="block text-xs font-bold text-slate-300 mb-1.5">Observações do treino (opcional)</label>
+              <input id="sessionNotesInput" type="text" value="${escapeHtml(s.notes || '')}" placeholder="Ex.: Banco no ajuste 3, postura super firme..." class="w-full px-3.5 py-2.5 rounded-xl bg-[#0b1120] border border-slate-700 text-sm text-white focus:outline-none focus:border-violet-500" />
+            </div>
+
+            <button type="button" id="btnFinishSession" class="w-full py-4 px-5 rounded-2xl text-sm sm:text-base font-black bg-gradient-to-r from-[#8b5cf6] to-[#14b8a6] hover:brightness-110 text-[#0b1120] shadow-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+              <span>✔</span>
+              <span>Finalizar e Salvar Treino (${doneSets}/${totalSets} séries)</span>
+            </button>
+          </section>
+        </div>
+      `;
+    }
+
+    function renderGuidedExerciseCard(ex, exIndex, draftEx, totalExercises) {
+      const vIdx = typeof draftEx.variantIndex === 'number' ? draftEx.variantIndex : 0;
+      const activeOpt = getActiveExerciseOption(ex, vIdx);
+      const lastRec = getLastRecordForExercise(ex.id, activeOpt.name);
+      const prog = getSafeProgressionSuggestion(ex, activeOpt, lastRec);
+      const guideOpen = ui.openGuideId === ex.id;
+      const isTime = Boolean(activeOpt.isTimeBased);
+      const stepKg = state.kgStepSize || 1;
+
+      return `
+        <article class="bg-[#111c33] border border-slate-700/90 rounded-2xl p-4 space-y-3.5 shadow-lg">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-black px-2 py-0.5 rounded-md bg-[#8b5cf6] text-white">Exercício ${exIndex + 1} de ${totalExercises}</span>
+                ${vIdx > 0 ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-teal-500/20 text-teal-300 border border-teal-500/40">🔄 Substituta</span>' : ''}
+              </div>
+              <button type="button" data-toggle-guide="${ex.id}" class="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all active:scale-95 ${
+                guideOpen
+                  ? 'bg-[#8b5cf6] text-white border-violet-400'
+                  : 'bg-[#0b1120] text-teal-300 border-teal-500/35'
+              }">
+                🎥 ${guideOpen ? 'Fechar Vídeo' : 'Vídeo & Dica'}
+              </button>
+            </div>
+
+            <h3 class="text-base sm:text-lg font-black text-white leading-snug">${escapeHtml(activeOpt.name)}</h3>
+
+            <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
+              <span class="text-violet-300">${ex.sets} séries × ${activeOpt.repLabel}</span>
+              <span class="text-slate-600">•</span>
+              <span class="text-teal-300">⏱ Descanso ${ex.restSec}s</span>
+            </div>
+
+            <!-- Substitutos em 1 toque dentro do Treino Guiado -->
+            ${renderInlineExerciseSubStrip(ex, vIdx, 'session', exIndex)}
+
+            <!-- Referência Anterior + Progressão Segura -->
+            <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-3 space-y-1.5 text-xs">
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="text-[11px] font-bold text-slate-400">
+                  📌 Última vez:
+                  <strong class="text-slate-200">
+                    ${lastRec ? lastRec.sets.map(st => isTime ? `${st.reps}s` : `${st.kg}kg×${st.reps}`).join(' · ') : 'Primeiro registro'}
+                  </strong>
+                </span>
+                ${lastRec ? `<span class="text-[10px] text-slate-500">${formatShortDate(lastRec.date)}</span>` : ''}
+              </div>
+              <div class="flex items-start gap-1.5 pt-1 border-t border-slate-800/80 ${prog.type === 'up' ? 'text-teal-300' : 'text-violet-300'}">
+                <span class="font-extrabold shrink-0">${prog.label}:</span>
+                <span class="text-slate-300 leading-snug">${prog.text}</span>
+              </div>
+            </div>
+          </div>
+
+          ${guideOpen ? renderExerciseGuideAccordion(ex, vIdx) : ''}
+
+          <!-- Checklist Interativo de Séries -->
+          <div class="space-y-2">
+            <div class="grid grid-cols-12 gap-1.5 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <span class="col-span-2">Série</span>
+              <span class="col-span-4 text-center">${isTime ? 'Tipo' : 'Carga (kg)'}</span>
+              <span class="col-span-4 text-center">${isTime ? 'Segundos' : 'Reps'}</span>
+              <span class="col-span-2 text-center">Feito</span>
+            </div>
+
+            ${draftEx.sets.map((st, sIdx) => `
+              <div class="grid grid-cols-12 gap-1.5 items-center p-2 rounded-xl border transition-all ${
+                st.done
+                  ? 'bg-teal-500/12 border-teal-500/50'
+                  : 'bg-[#0b1120] border-slate-800'
+              }">
+                <div class="col-span-2 flex items-center">
+                  <span class="w-7 h-7 rounded-lg text-xs font-black flex items-center justify-center ${
+                    st.done ? 'bg-[#14b8a6] text-[#0b1120]' : 'bg-slate-800 text-slate-300'
+                  }">S${sIdx + 1}</span>
+                </div>
+
+                ${isTime ? `
+                  <div class="col-span-4 flex items-center justify-center">
+                    <button type="button" data-plank-timer="${Number(st.reps) || 35}" class="w-full h-9 rounded-lg bg-violet-500/15 border border-violet-500/35 text-[11px] font-extrabold text-violet-200 active:scale-95">
+                      ⏱ Contar ${Number(st.reps) || 35}s
+                    </button>
+                  </div>
+                ` : `
+                  <div class="col-span-4 flex items-center gap-1">
+                    <button type="button" data-kg-step="${exIndex}:${sIdx}:-${stepKg}" class="w-7 h-9 rounded-lg bg-slate-800 text-slate-200 font-black text-sm active:scale-90">−</button>
+                    <input type="number" step="0.5" inputmode="decimal" data-kg-inp="${exIndex}:${sIdx}" value="${st.kg}" placeholder="0" class="w-full h-9 text-center rounded-lg bg-[#111c33] border border-slate-700 text-xs font-black text-white tabular-nums focus:outline-none focus:border-violet-500" />
+                    <button type="button" data-kg-step="${exIndex}:${sIdx}:${stepKg}" class="w-7 h-9 rounded-lg bg-slate-800 text-slate-200 font-black text-sm active:scale-90">+</button>
+                  </div>
+                `}
+
+                <div class="col-span-4 flex items-center gap-1">
+                  <button type="button" data-rep-step="${exIndex}:${sIdx}:${isTime ? -5 : -1}" class="w-7 h-9 rounded-lg bg-slate-800 text-slate-200 font-black text-sm active:scale-90">−</button>
+                  <input type="number" inputmode="numeric" data-rep-inp="${exIndex}:${sIdx}" value="${st.reps}" placeholder="${activeOpt.repMin}" class="w-full h-9 text-center rounded-lg bg-[#111c33] border border-slate-700 text-xs font-black text-white tabular-nums focus:outline-none focus:border-violet-500" />
+                  <button type="button" data-rep-step="${exIndex}:${sIdx}:${isTime ? 5 : 1}" class="w-7 h-9 rounded-lg bg-slate-800 text-slate-200 font-black text-sm active:scale-90">+</button>
+                </div>
+
+                <div class="col-span-2 flex justify-center">
+                  <button type="button" data-set-done="${exIndex}:${sIdx}" class="w-10 h-10 rounded-xl font-black text-base flex items-center justify-center border-2 transition-all active:scale-90 ${
+                    st.done
+                      ? 'bg-[#14b8a6] text-[#0b1120] border-teal-300 shadow-md shadow-teal-500/30'
+                      : 'bg-[#111c33] text-slate-500 border-slate-700 hover:border-teal-500/60'
+                  }">✓</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            ${!isTime ? `
+              <button type="button" data-copy-first-set="${exIndex}" class="text-[11px] font-bold text-violet-300 hover:underline">
+                📋 Repetir carga da S1
+              </button>
+            ` : `<span class="text-[11px] text-slate-500">Peso corporal · Controle postural</span>`}
+            <button type="button" data-manual-rest="${ex.restSec}" class="text-[11px] font-bold text-teal-300 hover:underline">
+              ⏱ Descanso (${ex.restSec}s)
+            </button>
+          </div>
+        </article>
+      `;
+    }
+
+    function applyExerciseSubstitute(mode, refKey, chosenIdx, fixDefault = false) {
+      let ex = null;
+      if (mode === 'session' && state.activeSession) {
+        const exIndex = Number(refKey);
+        const workout = WORKOUTS[state.activeSession.workoutId];
+        ex = workout?.exercises?.[exIndex];
+        if (ex && state.activeSession.exercises[exIndex]) {
+          const prevOpt = getActiveExerciseOption(ex, state.activeSession.exercises[exIndex].variantIndex || 0);
+          const nextOpt = getActiveExerciseOption(ex, chosenIdx);
+          state.activeSession.exercises[exIndex].variantIndex = chosenIdx;
+          state.activeSession.exercises[exIndex].usedSubstitute = chosenIdx > 0;
+          // Se alternou entre tempo (Prancha) e repetições (Máquina), ajusta valores das séries não feitas
+          if (Boolean(prevOpt.isTimeBased) !== Boolean(nextOpt.isTimeBased)) {
+            state.activeSession.exercises[exIndex].sets.forEach(st => {
+              if (!st.done) {
+                st.kg = nextOpt.isTimeBased ? 0 : '';
+                st.reps = nextOpt.repMin;
+              }
+            });
+          }
+          if (fixDefault) state.preferredExVariant[ex.id] = chosenIdx;
+        }
+      } else {
+        ex = ALL_EXERCISES.find(e => e.id === refKey);
+        if (ex) state.preferredExVariant[ex.id] = chosenIdx;
+      }
+      if (!ex) return;
+      ui.inlineEmbedKey = null;
+      const opt = getActiveExerciseOption(ex, chosenIdx);
+      persistState();
+      renderApp();
+      showToast(`🔄 Selecionado: ${opt.name}`, 'success');
+    }
+
+    function openExerciseSubPicker(mode, refKey) {
+      let ex = null;
+      let currentIdx = 0;
+
+      if (mode === 'session' && state.activeSession) {
+        const idx = Number(refKey);
+        ex = WORKOUTS[state.activeSession.workoutId]?.exercises?.[idx];
+        const draft = state.activeSession.exercises[idx];
+        currentIdx = typeof draft?.variantIndex === 'number' ? draft.variantIndex : 0;
+      } else {
+        ex = ALL_EXERCISES.find(e => e.id === refKey);
+        currentIdx = Number(state.preferredExVariant?.[refKey]) || 0;
+      }
+      if (!ex) return;
+
+      const variants = getExerciseVariants(ex);
+
+      openModal({
+        title: `🔄 Substitutos — ${ex.shortName || ex.name}`,
+        bodyHtml: `
+          <div class="space-y-3">
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Escolha a máquina/opção disponível na academia. O vídeo, as dicas e o histórico se ajustam na hora:
+            </p>
+            <div class="space-y-2.5">
+              ${variants.map((v, idx) => {
+                const isSelected = idx === currentIdx;
+                return `
+                  <div class="rounded-xl border-2 p-3 transition-all ${
+                    isSelected ? 'bg-violet-500/12 border-[#8b5cf6]' : 'bg-[#0b1120] border-slate-800'
+                  }">
+                    <div class="flex items-start justify-between gap-2">
+                      <div class="min-w-0">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                          <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-md ${
+                            v.isPrincipal ? 'bg-violet-500/20 text-violet-300' : 'bg-teal-500/20 text-teal-300'
+                          }">${v.isPrincipal ? 'Padrão' : `Substituto ${idx}`}</span>
+                          <span class="text-[10px] font-bold text-slate-400">${ex.sets}× ${v.repLabel}</span>
+                          ${isSelected ? '<span class="text-[10px] font-bold text-teal-300">✓ Em uso</span>' : ''}
+                        </div>
+                        <div class="text-sm font-extrabold text-white mt-1">${escapeHtml(v.name)}</div>
+                        <div class="text-[11px] text-slate-400 mt-0.5 leading-snug">${escapeHtml(v.note)}</div>
+                      </div>
+                      <a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-rose-600/20 text-rose-300 border border-rose-500/35 shrink-0">
+                        🎥 Vídeo ↗
+                      </a>
+                    </div>
+                    <div class="flex items-center gap-2 mt-2.5">
+                      <button type="button" data-pick-ex-var="${idx}:once" class="flex-1 py-2 px-3 rounded-lg text-xs font-black active:scale-95 ${
+                        isSelected ? 'bg-slate-800 text-slate-300' : 'bg-[#14b8a6] text-[#0b1120]'
+                      }">
+                        ${mode === 'session' ? (isSelected ? 'Em uso hoje' : 'Usar neste treino') : (isSelected ? 'Definido como padrão' : 'Selecionar')}
+                      </button>
+                      ${mode === 'session' && !isSelected ? `
+                        <button type="button" data-pick-ex-var="${idx}:always" class="py-2 px-3 rounded-lg text-[11px] font-bold bg-[#111c33] text-violet-300 border border-violet-500/40 active:scale-95">
+                          Fixar padrão
+                        </button>
+                      ` : ''}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `,
+        hideConfirm: true,
+        cancelText: 'Fechar'
+      });
+
+      document.querySelectorAll('[data-pick-ex-var]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const [idxStr, scope] = btn.dataset.pickExVar.split(':');
+          closeModal();
+          applyExerciseSubstitute(mode, refKey, Number(idxStr), scope === 'always');
+        });
+      });
+    }
+
+    function bindTreinoEvents() {
+      const safetyBtn = document.getElementById('btnToggleSafety');
+      if (safetyBtn) {
+        safetyBtn.addEventListener('click', () => {
+          state.safetyBannerCollapsed = !state.safetyBannerCollapsed;
+          persistState();
+          renderApp();
+        });
+      }
+
+      const volBtn = document.getElementById('btnLogVolleyball');
+      if (volBtn) volBtn.addEventListener('click', openLogVolleyballModal);
+
+      document.querySelectorAll('[data-select-workout]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.selectedWorkoutId = btn.dataset.selectWorkout;
+          ui.openGuideId = null;
+          ui.inlineEmbedKey = null;
+          persistState();
+          renderApp();
+        });
+      });
+
+      document.querySelectorAll('[data-start-workout]').forEach(btn => {
+        btn.addEventListener('click', () => startGuidedSession(btn.dataset.startWorkout));
+      });
+
+      document.querySelectorAll('[data-toggle-guide]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.toggleGuide;
+          ui.openGuideId = ui.openGuideId === id ? null : id;
+          ui.inlineEmbedKey = null;
+          renderApp();
+        });
+      });
+
+      document.querySelectorAll('[data-open-inline-vid]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          ui.inlineEmbedKey = btn.dataset.openInlineVid;
+          renderApp();
+        });
+      });
+
+      document.querySelectorAll('[data-close-inline-vid]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          ui.inlineEmbedKey = null;
+          renderApp();
+        });
+      });
+
+      document.querySelectorAll('[data-quick-ex-sub]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const [mode, refKey, idxStr] = btn.dataset.quickExSub.split(':');
+          applyExerciseSubstitute(mode, refKey, Number(idxStr), false);
+        });
+      });
+
+      document.querySelectorAll('[data-open-ex-sub]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const [mode, refKey] = btn.dataset.openExSub.split(':');
+          openExerciseSubPicker(mode, refKey);
+        });
+      });
+
+      const pauseBtn = document.getElementById('btnPauseSession');
+      if (pauseBtn) pauseBtn.addEventListener('click', toggleSessionPause);
+
+      const cancelBtn = document.getElementById('btnCancelSession');
+      if (cancelBtn) cancelBtn.addEventListener('click', cancelActiveSession);
+
+      const finishBtn = document.getElementById('btnFinishSession');
+      if (finishBtn) finishBtn.addEventListener('click', finishAndSaveSession);
+
+      const topFinish = document.getElementById('btnTopFinishQuick');
+      if (topFinish) topFinish.addEventListener('click', finishAndSaveSession);
+
+      const kgStepBtn = document.getElementById('btnToggleKgStep');
+      if (kgStepBtn) {
+        kgStepBtn.addEventListener('click', () => {
+          state.kgStepSize = state.kgStepSize === 1 ? 2.5 : 1;
+          persistState();
+          renderApp();
+          showToast(`Ajuste dos botões alterado para ±${state.kgStepSize} kg.`, 'info');
+        });
+      }
+
+      const toggleAllBtn = document.getElementById('btnToggleGuidedAll');
+      if (toggleAllBtn) {
+        toggleAllBtn.addEventListener('click', () => {
+          ui.guidedViewAll = !ui.guidedViewAll;
+          renderApp();
+        });
+      }
+
+      document.querySelectorAll('[data-jump-ex]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (!state.activeSession) return;
+          state.activeSession.currentExIndex = Number(btn.dataset.jumpEx);
+          ui.guidedViewAll = false;
+          persistState();
+          renderApp();
+        });
+      });
+
+      const prevEx = document.getElementById('btnPrevEx');
+      if (prevEx) {
+        prevEx.addEventListener('click', () => {
+          if (state.activeSession && state.activeSession.currentExIndex > 0) {
+            state.activeSession.currentExIndex--;
+            persistState();
+            renderApp();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      }
+
+      const nextEx = document.getElementById('btnNextEx');
+      if (nextEx) {
+        nextEx.addEventListener('click', () => {
+          if (!state.activeSession) return;
+          const max = WORKOUTS[state.activeSession.workoutId].exercises.length - 1;
+          if (state.activeSession.currentExIndex < max) {
+            state.activeSession.currentExIndex++;
+            persistState();
+            renderApp();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      }
+
+      document.querySelectorAll('[data-kg-step]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const [exI, sI, delta] = btn.dataset.kgStep.split(':').map(Number);
+          const st = state.activeSession?.exercises?.[exI]?.sets?.[sI];
+          if (!st) return;
+          st.kg = Math.max(0, Math.round(((Number(st.kg) || 0) + delta) * 10) / 10);
+          persistState();
+          renderApp();
+        });
+      });
+
+      document.querySelectorAll('[data-kg-inp]').forEach(inp => {
+        inp.addEventListener('input', (e) => {
+          const [exI, sI] = inp.dataset.kgInp.split(':').map(Number);
+          const st = state.activeSession?.exercises?.[exI]?.sets?.[sI];
+          if (st) { st.kg = e.target.value; persistState(); }
+        });
+      });
+
+      document.querySelectorAll('[data-rep-step]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const [exI, sI, delta] = btn.dataset.repStep.split(':').map(Number);
+          const st = state.activeSession?.exercises?.[exI]?.sets?.[sI];
+          if (!st) return;
+          st.reps = Math.max(0, (Number(st.reps) || 0) + delta);
+          persistState();
+          renderApp();
+        });
+      });
+
+      document.querySelectorAll('[data-rep-inp]').forEach(inp => {
+        inp.addEventListener('input', (e) => {
+          const [exI, sI] = inp.dataset.repInp.split(':').map(Number);
+          const st = state.activeSession?.exercises?.[exI]?.sets?.[sI];
+          if (st) { st.reps = e.target.value; persistState(); }
+        });
+      });
+
+      document.querySelectorAll('[data-plank-timer]').forEach(btn => {
+        btn.addEventListener('click', () => startRestTimer(Number(btn.dataset.plankTimer) || 35, 'Prancha'));
+      });
+
+      document.querySelectorAll('[data-set-done]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const [exI, sI] = btn.dataset.setDone.split(':').map(Number);
+          const s = state.activeSession;
+          const st = s?.exercises?.[exI]?.sets?.[sI];
+          if (!st) return;
+          st.done = !st.done;
+          if (st.done) {
+            const exDef = WORKOUTS[s.workoutId].exercises[exI];
+            startRestTimer(exDef.restSec, 'Descanso');
+          }
+          persistState();
+          renderApp();
+        });
+      });
+
+      document.querySelectorAll('[data-copy-first-set]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const exI = Number(btn.dataset.copyFirstSet);
+          const sets = state.activeSession?.exercises?.[exI]?.sets;
+          if (!sets || sets.length < 2) return;
+          const baseKg = sets[0].kg;
+          sets.forEach((st, idx) => { if (idx > 0) st.kg = baseKg; });
+          persistState();
+          renderApp();
+          showToast(`Carga ${baseKg || 0} kg copiada para as outras séries.`, 'info');
+        });
+      });
+
+      document.querySelectorAll('[data-manual-rest]').forEach(btn => {
+        btn.addEventListener('click', () => startRestTimer(Number(btn.dataset.manualRest), 'Descanso'));
+      });
+
+      document.querySelectorAll('[data-sess-effort]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (!state.activeSession) return;
+          state.activeSession.effort = btn.dataset.sessEffort;
+          persistState();
+          renderApp();
+        });
+      });
+
+      const notesInp = document.getElementById('sessionNotesInput');
+      if (notesInp) {
+        notesInp.addEventListener('input', (e) => {
+          if (state.activeSession) { state.activeSession.notes = e.target.value; persistState(); }
+        });
+      }
+    }
+
+    /**
+     * ============================================================================
+     * ABA 2: DIETA & NUTRIÇÃO (0% SUPLEMENTOS, CRESCIMENTO SAUDÁVEL, 1 TOQUE)
+     * ============================================================================
+     */
+    function getDisplayedFoodText(item) {
+      const sel = state.mealSubs[item.id];
+      if (typeof sel === 'string' && sel.startsWith('custom:')) {
+        return { text: sel.slice(7), isSub: true, isCustom: true, subIdx: -2 };
+      }
+      if (typeof sel === 'number' && sel >= 0 && item.subs[sel]) {
+        return { text: item.subs[sel].text, isSub: true, isCustom: false, subIdx: sel };
+      }
+      return { text: item.baseText, isSub: false, isCustom: false, subIdx: -1 };
+    }
+
+    function renderDietaTab() {
+      const modeObj = DIET_MODES[state.dietMode] || DIET_MODES.base;
+      const todayLog = getTodayDietLog();
+
+      let curKcal = 0, curP = 0, curC = 0, curG = 0, mealsDoneCount = 0;
+      MEALS.forEach(m => {
+        if (todayLog.mealsDone[m.id]) {
+          const mm = m.macros[state.dietMode];
+          curKcal += mm.kcal; curP += mm.p; curC += mm.c; curG += mm.g;
+          mealsDoneCount++;
+        }
+      });
+
+      const waterGoal = modeObj.waterGoalMl;
+      const waterMl = todayLog.waterMl || 0;
+      const waterCups = Math.floor(waterMl / 250);
+      const totalGoalCups = Math.ceil(waterGoal / 250);
+      const waterPct = Math.min(100, Math.round((waterMl / waterGoal) * 100));
+
+      const macroBar = (label, cur, goal, unit, color) => {
+        const pct = Math.min(100, Math.round((cur / goal) * 100));
+        return `
+          <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-2.5 space-y-1.5">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-slate-300">${label}</span>
+              <span class="font-black text-white tabular-nums">${cur}<span class="text-slate-500 font-semibold">/${goal}${unit}</span></span>
+            </div>
+            <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+              <div class="h-full ${color} rounded-full transition-all" style="width:${pct}%"></div>
+            </div>
+          </div>
+        `;
+      };
+
+      return `
+        <div class="space-y-4 animate-in">
+          <!-- Aviso Educativo Pediátrico -->
+          <section class="bg-teal-500/10 border border-teal-500/35 rounded-2xl p-3.5 text-xs text-teal-100 leading-relaxed">
+            <strong class="text-teal-300">🌱 Alimentação para Crescimento e Massa Magra (12 anos):</strong>
+            sem restrição severa e <strong>sem suplementos</strong> (Vitamina B12 já está alta em 1.020 pg/mL). Prioridade: <strong>Proteína em comida de verdade</strong>, <strong>Ferro + Vitamina C</strong> (Ferritina 33,5) e <strong>Cálcio</strong> para ossos fortes.
+          </section>
+
+          <!-- Seletor de 2 Modos Energéticos -->
+          <section class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            ${Object.values(DIET_MODES).map(m => {
+              const active = state.dietMode === m.id;
+              return `
+                <button type="button" data-diet-mode="${m.id}" class="text-left p-4 rounded-2xl border-2 transition-all ${
+                  active
+                    ? 'bg-violet-500/15 border-[#8b5cf6] shadow-lg shadow-violet-950/30'
+                    : 'bg-[#111c33] border-slate-800 hover:border-slate-700'
+                }">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
+                      active ? 'bg-[#8b5cf6] text-white' : 'bg-slate-800 text-slate-400'
+                    }">${m.badge}</span>
+                    <span class="text-sm font-black tabular-nums ${active ? 'text-teal-300' : 'text-white'}">${m.kcal.toLocaleString('pt-BR')} kcal</span>
+                  </div>
+                  <div class="text-sm font-extrabold text-white mt-1.5">${m.title}</div>
+                  <p class="text-[11px] text-slate-400 mt-1 leading-snug">${m.desc}</p>
+                  <div class="flex items-center gap-3 text-[11px] font-bold mt-2 tabular-nums">
+                    <span class="text-violet-300">P ${m.p}g</span>
+                    <span class="text-teal-300">C ${m.c}g</span>
+                    <span class="text-amber-300">G ${m.g}g</span>
+                  </div>
+                </button>
+              `;
+            }).join('')}
+          </section>
+
+          <!-- Progresso Diário + Hidratação em Copos de 250 ml -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-3.5">
+            <section class="lg:col-span-2 bg-[#111c33] border border-slate-800 rounded-2xl p-4 space-y-3">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <h3 class="text-sm font-extrabold text-white">Refeições Hoje (${mealsDoneCount}/4)</h3>
+                <span class="text-[11px] font-bold text-slate-400">04:30 Acordar · 20:30 Dormir</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                ${macroBar('Energia', curKcal, modeObj.kcal, ' kcal', 'bg-[#8b5cf6]')}
+                ${macroBar('Proteína', curP, modeObj.p, 'g', 'bg-[#14b8a6]')}
+                ${macroBar('Carboidratos', curC, modeObj.c, 'g', 'bg-amber-400')}
+                ${macroBar('Gordura Boa', curG, modeObj.g, 'g', 'bg-sky-400')}
+              </div>
+            </section>
+
+            <!-- Rastreador de Água (Copos de 250 ml) -->
+            <section class="bg-[#111c33] border border-slate-800 rounded-2xl p-4 flex flex-col justify-between gap-3">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-teal-300">💧 Hidratação (Copos 250 ml)</span>
+                  <span class="text-[11px] font-bold text-slate-400">Meta ${(waterGoal / 1000).toFixed(1).replace('.', ',')} L</span>
+                </div>
+                <div class="flex items-baseline justify-between mt-1">
+                  <div class="text-2xl font-black text-white tabular-nums">
+                    ${(waterMl / 1000).toFixed(2).replace('.', ',')} <span class="text-xs font-semibold text-slate-400">L</span>
+                  </div>
+                  <span class="text-xs font-bold text-teal-300">${waterCups}/${totalGoalCups} copos</span>
+                </div>
+                <div class="w-full h-2 bg-[#0b1120] rounded-full overflow-hidden mt-2">
+                  <div class="h-full bg-[#14b8a6] rounded-full transition-all" style="width:${waterPct}%"></div>
+                </div>
+                <!-- Copinhos interativos -->
+                <div class="flex flex-wrap gap-1 mt-2.5">
+                  ${Array.from({ length: totalGoalCups }, (_, idx) => {
+                    const filled = idx < waterCups;
+                    return `<button type="button" data-set-cups="${idx + 1}" title="${(idx + 1) * 250} ml" class="w-6 h-6 rounded-lg text-[11px] flex items-center justify-center border transition-all ${
+                      filled ? 'bg-teal-500/25 border-teal-400 text-teal-200' : 'bg-[#0b1120] border-slate-800 text-slate-600'
+                    }">💧</button>`;
+                  }).join('')}
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button" data-water="-250" class="py-2 rounded-xl text-xs font-extrabold bg-[#0b1120] text-slate-300 border border-slate-700 active:scale-95">− 1 copo</button>
+                <button type="button" data-water="250" class="py-2 rounded-xl text-xs font-extrabold bg-[#14b8a6] text-[#0b1120] active:scale-95">+ 1 copo (250ml)</button>
+              </div>
+            </section>
+          </div>
+
+          <!-- 4 Refeições com Chips de Substituição em 1 Toque + Modal Opções -->
+          <div class="space-y-3.5">
+            ${MEALS.map(meal => {
+              const done = Boolean(todayLog.mealsDone[meal.id]);
+              const mMacros = meal.macros[state.dietMode];
+              const visibleItems = meal.items.filter(it => !it.onlyMode || it.onlyMode === state.dietMode);
+
+              return `
+                <article class="bg-[#111c33] border ${done ? 'border-teal-500/60' : 'border-slate-800'} rounded-2xl overflow-hidden transition-all">
+                  <div class="p-3.5 bg-[#0b1120]/55 border-b border-slate-800/80 flex items-center justify-between gap-2">
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <span class="text-[11px] font-black px-2 py-0.5 rounded-md bg-violet-500/20 text-violet-300 border border-violet-500/35">${meal.time}</span>
+                        <h4 class="text-sm font-extrabold text-white truncate">${meal.title}</h4>
+                      </div>
+                      <div class="text-[11px] text-slate-400 font-semibold mt-1 tabular-nums">
+                        ${mMacros.kcal} kcal · P ${mMacros.p}g · C ${mMacros.c}g · G ${mMacros.g}g
+                      </div>
+                    </div>
+                    <button type="button" data-meal-done="${meal.id}" class="px-3 py-2 rounded-xl text-xs font-black shrink-0 border transition-all active:scale-95 ${
+                      done
+                        ? 'bg-[#14b8a6] text-[#0b1120] border-teal-300'
+                        : 'bg-[#0b1120] text-slate-300 border-slate-700 hover:border-teal-500/50'
+                    }">
+                      ${done ? '✓ Feita' : 'Marcar'}
+                    </button>
+                  </div>
+
+                  <div class="p-3.5 space-y-2.5">
+                    ${meal.note ? `<div class="text-[11px] text-slate-300 bg-[#0b1120]/60 border border-slate-800 rounded-xl px-3 py-2 leading-snug">${meal.note}</div>` : ''}
+
+                    ${visibleItems.map(item => {
+                      const info = getDisplayedFoodText(item);
+                      const borderClass = info.isSub
+                        ? 'border-teal-500/50'
+                        : item.highlight === 'violet'
+                          ? 'border-violet-500/50 bg-violet-950/20'
+                          : item.highlight === 'teal'
+                            ? 'border-teal-500/35'
+                            : 'border-slate-800';
+
+                      return `
+                        <div class="bg-[#0b1120]/90 border ${borderClass} rounded-xl p-3 space-y-2">
+                          <div class="flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                              <div class="flex items-center gap-1.5 flex-wrap mb-0.5">
+                                <span class="text-[10px] font-bold uppercase tracking-wider ${item.highlight === 'violet' ? 'text-violet-300' : item.highlight === 'teal' ? 'text-teal-300' : 'text-slate-400'}">${item.tag}</span>
+                                ${info.isSub ? `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300">${info.isCustom ? 'Personalizado' : 'Substituído'}</span>` : ''}
+                              </div>
+                              <div class="text-xs sm:text-sm font-semibold ${info.isSub ? 'text-teal-100' : 'text-slate-100'} leading-snug">${escapeHtml(info.text)}</div>
+                            </div>
+                            <button type="button" data-open-meal-sub="${meal.id}:${item.id}" class="px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-[#111c33] text-teal-300 border border-slate-700 hover:border-teal-500/50 shrink-0 active:scale-95">
+                              🔄 Opções
+                            </button>
+                          </div>
+
+                          <!-- Chips de Substituição em 1 Toque -->
+                          <div class="flex flex-wrap items-center gap-1.5 pt-1.5 border-t border-slate-800/80">
+                            <span class="text-[10px] font-bold text-slate-500 mr-0.5">Trocar:</span>
+                            <button type="button" data-quick-meal-sub="${item.id}:-1" class="px-2 py-1 rounded-lg text-[10px] font-bold border transition-all active:scale-95 ${
+                              !info.isSub ? 'bg-violet-500/20 text-violet-200 border-violet-400' : 'bg-[#111c33] text-slate-400 border-slate-800 hover:text-slate-200'
+                            }">
+                              ${!info.isSub ? '✓ ' : ''}Padrão
+                            </button>
+                            ${item.subs.map((sub, idx) => {
+                              const act = info.subIdx === idx;
+                              return `
+                                <button type="button" data-quick-meal-sub="${item.id}:${idx}" class="px-2 py-1 rounded-lg text-[10px] font-bold border transition-all active:scale-95 ${
+                                  act ? 'bg-teal-500/20 text-teal-200 border-teal-400' : 'bg-[#111c33] text-slate-400 border-slate-800 hover:text-slate-200'
+                                }">
+                                  ${act ? '✓ ' : ''}${escapeHtml(sub.short)}
+                                </button>
+                              `;
+                            }).join('')}
+                          </div>
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                </article>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function openMealSubPicker(mealId, itemId) {
+      const meal = MEALS.find(m => m.id === mealId);
+      const item = meal?.items?.find(i => i.id === itemId);
+      if (!meal || !item) return;
+
+      const info = getDisplayedFoodText(item);
+
+      openModal({
+        title: `🔄 Substituir — ${item.tag}`,
+        bodyHtml: `
+          <div class="space-y-3">
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Refeição ${meal.num}. Escolha uma substituição equivalente ou digite o que você comeu hoje:
+            </p>
+            <div class="space-y-2">
+              <button type="button" data-pick-meal-sub="-1" class="w-full text-left p-3 rounded-xl border-2 transition-all active:scale-[0.99] ${
+                !info.isSub ? 'bg-violet-500/15 border-[#8b5cf6]' : 'bg-[#0b1120] border-slate-800'
+              }">
+                <div class="flex items-center justify-between gap-2 mb-0.5">
+                  <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-violet-500/20 text-violet-300">Opção Padrão</span>
+                  ${!info.isSub ? '<span class="text-[11px] font-extrabold text-violet-300">✓ Selecionada</span>' : ''}
+                </div>
+                <div class="text-xs sm:text-sm font-bold text-white leading-snug">${escapeHtml(item.baseText)}</div>
+              </button>
+
+              ${item.subs.map((sub, idx) => {
+                const active = info.subIdx === idx;
+                return `
+                  <button type="button" data-pick-meal-sub="${idx}" class="w-full text-left p-3 rounded-xl border-2 transition-all active:scale-[0.99] ${
+                    active ? 'bg-teal-500/15 border-[#14b8a6]' : 'bg-[#0b1120] border-slate-800 hover:border-teal-500/40'
+                  }">
+                    <div class="flex items-center justify-between gap-2 mb-0.5">
+                      <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-teal-500/20 text-teal-300">${escapeHtml(sub.short)}</span>
+                      ${active ? '<span class="text-[11px] font-extrabold text-teal-300">✓ Em uso</span>' : ''}
+                    </div>
+                    <div class="text-xs sm:text-sm font-bold text-slate-100 leading-snug">${escapeHtml(sub.text)}</div>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="pt-2 border-t border-slate-800 space-y-2">
+              <label for="customFoodInp" class="block text-[11px] font-bold text-slate-300">✏️ Ou digite uma troca personalizada:</label>
+              <div class="flex gap-2">
+                <input id="customFoodInp" type="text" value="${info.isCustom ? escapeHtml(info.text) : ''}" placeholder="Ex.: Crepioca com queijo e frango" class="flex-1 px-3 py-2 rounded-xl bg-[#0b1120] border border-slate-700 text-xs text-white focus:outline-none focus:border-teal-500" />
+                <button type="button" id="btnSaveCustomFood" class="px-3.5 py-2 rounded-xl text-xs font-black bg-[#14b8a6] text-[#0b1120] shrink-0 active:scale-95">Usar</button>
+              </div>
+            </div>
+          </div>
+        `,
+        hideConfirm: true,
+        cancelText: 'Fechar'
+      });
+
+      document.querySelectorAll('[data-pick-meal-sub]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const val = Number(btn.dataset.pickMealSub);
+          state.mealSubs[item.id] = val;
+          persistState();
+          closeModal();
+          renderApp();
+          showToast(val === -1 ? 'Opção padrão restaurada.' : 'Alimento substituído!', 'success');
+        });
+      });
+
+      const saveCustom = document.getElementById('btnSaveCustomFood');
+      if (saveCustom) {
+        saveCustom.addEventListener('click', () => {
+          const val = (document.getElementById('customFoodInp')?.value || '').trim();
+          if (!val) { showToast('Digite o alimento substituto.', 'error'); return; }
+          state.mealSubs[item.id] = 'custom:' + val;
+          persistState();
+          closeModal();
+          renderApp();
+          showToast('Troca personalizada salva!', 'success');
+        });
+      }
+    }
+
+    function bindDietaEvents() {
+      const todayLog = getTodayDietLog();
+
+      document.querySelectorAll('[data-diet-mode]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.dietMode = btn.dataset.dietMode;
+          persistState();
+          renderApp();
+        });
+      });
+
+      document.querySelectorAll('[data-water]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          todayLog.waterMl = Math.max(0, Math.min(4500, (todayLog.waterMl || 0) + Number(btn.dataset.water)));
+          persistState();
+          renderApp();
+        });
+      });
+
+      document.querySelectorAll('[data-set-cups]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetMl = Number(btn.dataset.setCups) * 250;
+          todayLog.waterMl = todayLog.waterMl === targetMl ? Math.max(0, targetMl - 250) : targetMl;
+          persistState();
+          renderApp();
+        });
+      });
+
+      document.querySelectorAll('[data-meal-done]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.mealDone;
+          todayLog.mealsDone[id] = !todayLog.mealsDone[id];
+          persistState();
+          renderApp();
+        });
+      });
+
+      document.querySelectorAll('[data-quick-meal-sub]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const [itemId, idxStr] = btn.dataset.quickMealSub.split(':');
+          state.mealSubs[itemId] = Number(idxStr);
+          persistState();
+          renderApp();
+          showToast(Number(idxStr) === -1 ? 'Opção padrão restaurada.' : 'Alimento trocado!', 'success');
+        });
+      });
+
+      document.querySelectorAll('[data-open-meal-sub]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const [mealId, itemId] = btn.dataset.openMealSub.split(':');
+          openMealSubPicker(mealId, itemId);
+        });
+      });
+    }
+
+    /**
+     * ============================================================================
+     * ABA 3: EVOLUÇÃO, META SEMANAL, GRÁFICO, HISTÓRICO, CORPO, EXAMES & BACKUP
+     * ============================================================================
+     */
+    function renderLoadChartSVG(exId) {
+      const exObj = ALL_EXERCISES.find(e => e.id === exId);
+      const isTime = Boolean(exObj?.isTimeBased);
+      const points = [];
+
+      [...getGymHistory()].reverse().forEach(sess => {
+        const found = (sess.exercises || []).find(e => e.exId === exId && e.sets.some(st => st.done));
+        if (found) {
+          const doneSets = found.sets.filter(st => st.done);
+          const val = found.isTimeBased
+            ? Math.max(...doneSets.map(st => Number(st.reps) || 0))
+            : Math.max(...doneSets.map(st => Number(st.kg) || 0));
+          points.push({ date: formatShortDate(sess.completedAt), val, unit: found.isTimeBased ? 's' : 'kg' });
+        }
+      });
+
+      if (points.length === 0) {
+        return `<div class="h-36 flex items-center justify-center text-xs text-slate-400 bg-[#0b1120] rounded-xl border border-slate-800 px-4 text-center">Conclua pelo menos 1 treino com este exercício para visualizar a evolução ${isTime ? 'de tempo (seg)' : 'de cargas (kg)'}.</div>`;
+      }
+
+      const W = 500, H = 150, padX = 36, padY = 22;
+      const vals = points.map(p => p.val);
+      const minV = Math.max(0, Math.min(...vals) - 4);
+      const maxV = Math.max(...vals, minV + 8) + 4;
+      const span = maxV - minV || 1;
+
+      const coords = points.map((pt, i) => {
+        const x = points.length === 1 ? W / 2 : padX + (i / (points.length - 1)) * (W - padX * 2);
+        const y = H - padY - ((pt.val - minV) / span) * (H - padY * 2);
+        return { ...pt, x, y };
+      });
+
+      const poly = coords.map(c => `${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(' ');
+
+      return `
+        <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-2.5 overflow-hidden">
+          <svg viewBox="0 0 ${W} ${H}" class="w-full h-36">
+            <line x1="${padX}" y1="${padY}" x2="${W - padX}" y2="${padY}" stroke="#1e293b" stroke-dasharray="4"/>
+            <line x1="${padX}" y1="${H - padY}" x2="${W - padX}" y2="${H - padY}" stroke="#1e293b"/>
+            ${coords.length > 1 ? `<polyline fill="none" stroke="#8b5cf6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="${poly}"/>` : ''}
+            ${coords.map(c => `
+              <circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="5" fill="#14b8a6" stroke="#0b1120" stroke-width="2"/>
+              <text x="${c.x.toFixed(1)}" y="${(c.y - 10).toFixed(1)}" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="800">${c.val}${c.unit}</text>
+              <text x="${c.x.toFixed(1)}" y="${H - 5}" text-anchor="middle" fill="#94a3b8" font-size="10">${c.date}</text>
+            `).join('')}
+          </svg>
+        </div>
+      `;
+    }
+
+    function renderEvolucaoTab() {
+      const weekCounts = getWeeklyCounts();
+      const sortedBody = [...(state.bodyLogs || [])].sort((a, b) => a.date.localeCompare(b.date));
+      const latestBody = sortedBody[sortedBody.length - 1] || { weight: 59.3, height: 164, bf: 28.9 };
+      const bmiCalc = latestBody.weight && latestBody.height
+        ? (latestBody.weight / Math.pow(latestBody.height / 100, 2)).toFixed(1).replace('.', ',')
+        : '22,0';
+
+      const gymPct = Math.min(100, Math.round((weekCounts.gym / 4) * 100));
+      const volPct = Math.min(100, Math.round((weekCounts.volleyball / 2) * 100));
+
+      return `
+        <div class="space-y-4 animate-in">
+          <!-- Meta Semanal (4 Musculações + 2 Vôleis) -->
+          <section class="bg-gradient-to-br from-[#111c33] to-violet-950/35 border border-violet-500/35 rounded-2xl p-4 space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <h2 class="text-sm sm:text-base font-extrabold text-white">🎯 Meta Semanal (Seg–Dom)</h2>
+              <button type="button" id="btnLogVolFromEvo" class="px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-teal-500/15 text-teal-300 border border-teal-500/35 active:scale-95">
+                + 🏐 Vôlei
+              </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-3 space-y-1.5">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-bold text-slate-300">🏋️ Musculação (A–D)</span>
+                  <span class="font-black text-violet-300 tabular-nums">${weekCounts.gym} / 4</span>
+                </div>
+                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                  <div class="h-full bg-[#8b5cf6] rounded-full transition-all" style="width:${gymPct}%"></div>
+                </div>
+              </div>
+              <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-3 space-y-1.5">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-bold text-slate-300">🏐 Vôlei (40 min)</span>
+                  <span class="font-black text-teal-300 tabular-nums">${weekCounts.volleyball} / 2</span>
+                </div>
+                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                  <div class="h-full bg-[#14b8a6] rounded-full transition-all" style="width:${volPct}%"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Resumo de Composição Corporal -->
+          <section class="bg-[#111c33] border border-slate-800 rounded-2xl p-4 space-y-3">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <h3 class="text-sm font-extrabold text-white">📏 Composição Corporal &amp; Crescimento</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30">IMC ${bmiCalc} · Saudável</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-3">
+                <div class="text-[10px] font-bold uppercase text-slate-400">Peso / Altura</div>
+                <div class="text-base font-black text-white tabular-nums mt-0.5">${Number(latestBody.weight).toFixed(2).replace('.', ',')} kg</div>
+                <div class="text-[11px] text-teal-300 font-semibold">${latestBody.height || 164} cm</div>
+              </div>
+              <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-3">
+                <div class="text-[10px] font-bold uppercase text-slate-400">Músc. Esquelético</div>
+                <div class="text-base font-black text-teal-300 tabular-nums mt-0.5">21,9 kg</div>
+                <div class="text-[11px] text-teal-400 font-semibold">37,0% · Excelente</div>
+              </div>
+              <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-3">
+                <div class="text-[10px] font-bold uppercase text-slate-400">Massa Muscular Total</div>
+                <div class="text-base font-black text-violet-300 tabular-nums mt-0.5">39,1 kg</div>
+                <div class="text-[11px] text-slate-400 font-semibold">65,9% · Saudável</div>
+              </div>
+              <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-3">
+                <div class="text-[10px] font-bold uppercase text-slate-400">Gordura (BIA)</div>
+                <div class="text-base font-black text-amber-300 tabular-nums mt-0.5">${latestBody.bf ? Number(latestBody.bf).toFixed(1).replace('.', ',') + '%' : '28,9%'}</div>
+                <div class="text-[11px] text-slate-400">Referência balança</div>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/25 text-[11px] text-amber-100 leading-relaxed">
+              <strong class="text-amber-300">ℹ️ Nota importante (12 anos):</strong> balanças domésticas de bioimpedância usam fórmulas feitas para adultos e costumam <strong>superestimar o % de gordura</strong> em jovens em fase de crescimento. O destaque real aqui é a <strong>excelente base muscular (37,0%)</strong> e o <strong>IMC 22,0 saudável</strong>.
+            </div>
+          </section>
+
+          <!-- Gráfico SVG de Evolução de Cargas -->
+          <section class="bg-[#111c33] border border-slate-800 rounded-2xl p-4 space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <h3 class="text-sm font-extrabold text-white">📈 Evolução de Cargas por Máquina</h3>
+              <select id="chartExerciseSelect" class="px-3 py-2 rounded-xl bg-[#0b1120] border border-slate-700 text-xs font-bold text-violet-300 focus:outline-none focus:border-violet-500">
+                ${ALL_EXERCISES.map(ex => `<option value="${ex.id}" ${ui.chartExId === ex.id ? 'selected' : ''}>${ex.workoutId} · ${escapeHtml(ex.name)}</option>`).join('')}
+              </select>
+            </div>
+            ${renderLoadChartSVG(ui.chartExId)}
+          </section>
+
+          <!-- Histórico Expansível (Musculação + Vôlei) -->
+          <section class="bg-[#111c33] border border-slate-800 rounded-2xl p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-extrabold text-white">🗂 Histórico de Sessões (Musculação &amp; Vôlei)</h3>
+              <span class="text-[11px] text-slate-400">${state.sessionHistory.length} registro(s)</span>
+            </div>
+
+            ${state.sessionHistory.length === 0 ? `
+              <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-4 text-center text-xs text-slate-400">
+                Nenhuma sessão salva ainda. Inicie o <strong>Treino A</strong> ou registre um <strong>Treino de Vôlei</strong> na aba Treino!
+              </div>
+            ` : `
+              <div class="space-y-2">
+                ${state.sessionHistory.map(sess => {
+                  const isVol = sess.type === 'volleyball';
+                  const expanded = ui.expandedHistId === sess.id;
+                  const efColor = sess.effort === 'Fácil'
+                    ? 'text-teal-300 bg-teal-500/15'
+                    : sess.effort === 'Pesado'
+                      ? 'text-amber-300 bg-amber-500/15'
+                      : 'text-violet-300 bg-violet-500/15';
+
+                  return `
+                    <div class="bg-[#0b1120] border border-slate-800 rounded-xl overflow-hidden">
+                      <button type="button" data-expand-hist="${sess.id}" class="w-full p-3.5 text-left flex items-center justify-between gap-2 hover:bg-slate-900/60 transition-colors">
+                        <div class="min-w-0">
+                          <div class="flex items-center gap-2 flex-wrap">
+                            <span class="px-2 py-0.5 rounded-md text-[11px] font-black ${isVol ? 'bg-[#14b8a6] text-[#0b1120]' : 'bg-[#8b5cf6] text-white'}">${isVol ? '🏐' : sess.workoutId}</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-white truncate">${escapeHtml(sess.workoutName)} · ${formatShortDateTime(sess.completedAt)}</span>
+                          </div>
+                          <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-400 mt-1 tabular-nums">
+                            <span>⏱ ${formatMMSS(sess.durationSec)}</span>
+                            ${!isVol ? `<span>· ${sess.totalSetsDone}/${sess.totalSetsPlanned} séries</span>` : ''}
+                            ${!isVol && sess.totalVolumeKg ? `<span class="text-teal-300 font-semibold">· ${Number(sess.totalVolumeKg).toLocaleString('pt-BR')} kg</span>` : ''}
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${efColor}">${escapeHtml(sess.effort || 'Moderado')}</span>
+                          </div>
+                        </div>
+                        <span class="text-slate-400 text-xs font-bold shrink-0">${expanded ? '▲' : '▼'}</span>
+                      </button>
+
+                      ${expanded ? `
+                        <div class="px-3.5 pb-3.5 pt-2 border-t border-slate-800/90 space-y-2.5 animate-in">
+                          ${sess.notes ? `<div class="text-xs text-amber-200 bg-amber-500/10 border border-amber-500/25 rounded-lg px-3 py-2">📝 ${escapeHtml(sess.notes)}</div>` : ''}
+                          ${!isVol && Array.isArray(sess.exercises) ? `
+                            <div class="space-y-1.5">
+                              ${sess.exercises.map(ex => {
+                                const setsStr = ex.sets.filter(st => st.done).map((st, idx) =>
+                                  ex.isTimeBased ? `S${idx + 1}: ${st.reps}s` : `S${idx + 1}: ${st.kg}kg×${st.reps}`
+                                ).join(' | ') || 'Não executado';
+                                return `
+                                  <div class="bg-[#111c33] border border-slate-800 rounded-lg p-2.5 text-xs">
+                                    <div class="flex items-center justify-between gap-2">
+                                      <span class="font-bold text-white">${escapeHtml(ex.executedName)}</span>
+                                      ${ex.usedSubstitute ? '<span class="text-[10px] font-bold text-teal-300 bg-teal-500/15 px-1.5 py-0.5 rounded">Substituta</span>' : ''}
+                                    </div>
+                                    <div class="text-[11px] text-violet-300 font-semibold mt-1 tabular-nums">${setsStr}</div>
+                                  </div>
+                                `;
+                              }).join('')}
+                            </div>
+                          ` : `<div class="text-xs text-teal-200 bg-teal-500/10 border border-teal-500/25 rounded-lg p-2.5">🏐 Sessão de quadra registrada (${Math.round((sess.durationSec || 2400) / 60)} minutos).</div>`}
+                          <div class="flex items-center justify-between pt-1">
+                            <button type="button" data-share-hist="${sess.id}" class="text-[11px] font-bold text-teal-300 hover:bg-teal-500/10 px-2.5 py-1.5 rounded-lg">📤 Compartilhar</button>
+                            <button type="button" data-del-hist="${sess.id}" class="text-[11px] font-semibold text-rose-400 hover:bg-rose-500/10 px-2.5 py-1.5 rounded-lg">🗑 Excluir</button>
+                          </div>
+                        </div>
+                      ` : ''}
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            `}
+          </section>
+
+          <!-- Diário Corporal (Peso & Altura ao longo do crescimento) -->
+          <section class="bg-[#111c33] border border-slate-800 rounded-2xl p-4 space-y-3">
+            <h3 class="text-sm font-extrabold text-white">🌱 Diário de Crescimento (Peso &amp; Altura)</h3>
+            <form id="bodyLogForm" class="grid grid-cols-2 sm:grid-cols-5 gap-2 bg-[#0b1120] border border-slate-800 rounded-xl p-3">
+              <div>
+                <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Data</label>
+                <input id="bDate" type="date" value="${getTodayKey()}" required class="w-full px-2 py-2 rounded-lg bg-[#111c33] border border-slate-700 text-xs font-bold text-white" />
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Peso (kg)</label>
+                <input id="bWeight" type="number" step="0.1" inputmode="decimal" placeholder="59.3" required class="w-full px-2 py-2 rounded-lg bg-[#111c33] border border-slate-700 text-xs font-bold text-white tabular-nums" />
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Altura (cm)</label>
+                <input id="bHeight" type="number" step="0.5" inputmode="decimal" placeholder="164" value="${latestBody.height || 164}" required class="w-full px-2 py-2 rounded-lg bg-[#111c33] border border-slate-700 text-xs font-bold text-white tabular-nums" />
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">% Gord. (opc.)</label>
+                <input id="bBf" type="number" step="0.1" inputmode="decimal" placeholder="opc." class="w-full px-2 py-2 rounded-lg bg-[#111c33] border border-slate-700 text-xs font-bold text-white tabular-nums" />
+              </div>
+              <div class="col-span-2 sm:col-span-1 flex items-end">
+                <button type="submit" class="w-full py-2.5 rounded-lg text-xs font-black bg-[#14b8a6] text-[#0b1120] active:scale-95">Registrar</button>
+              </div>
+            </form>
+
+            <div class="space-y-1.5">
+              ${[...sortedBody].reverse().map(entry => {
+                const eBmi = entry.weight && entry.height ? (entry.weight / Math.pow(entry.height / 100, 2)).toFixed(1).replace('.', ',') : null;
+                return `
+                  <div class="bg-[#0b1120] border border-slate-800 rounded-xl px-3 py-2.5 flex items-center justify-between gap-2 text-xs">
+                    <div class="flex flex-wrap items-center gap-x-3 gap-y-0.5 tabular-nums">
+                      <span class="font-bold text-slate-400">${formatShortDate(entry.date)}</span>
+                      <strong class="text-white">${Number(entry.weight).toFixed(1).replace('.', ',')} kg</strong>
+                      ${entry.height ? `<span class="text-violet-300 font-semibold">${entry.height} cm</span>` : ''}
+                      ${eBmi ? `<span class="text-teal-300">IMC ${eBmi}</span>` : ''}
+                      ${entry.bf ? `<span class="text-amber-300/90">${Number(entry.bf).toFixed(1).replace('.', ',')}% GC</span>` : ''}
+                    </div>
+                    ${sortedBody.length > 1 ? `<button type="button" data-del-body="${entry.id}" class="text-rose-400 text-[11px] font-bold px-2 py-1">✕</button>` : '<span class="text-[10px] text-slate-500">Base</span>'}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </section>
+
+          <!-- Painel Clínico dos Exames Laboratoriais (02/05/2026) -->
+          <section class="bg-[#111c33] border border-slate-800 rounded-2xl p-4 space-y-3.5">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <h3 class="text-sm font-extrabold text-white">🩺 Exames Laboratoriais (02/05/2026)</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30">Perfil Metabólico Saudável</span>
+            </div>
+
+            <!-- Excelentes / Normais -->
+            <div class="space-y-2">
+              <div class="text-[11px] font-extrabold uppercase tracking-wider text-teal-300">✅ Excelentes / Dentro da Referência</div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                ${LAB_EXCELLENT.map(m => `
+                  <div class="bg-[#0b1120] border border-slate-800 rounded-xl p-2.5 flex items-center justify-between gap-2">
+                    <div class="min-w-0">
+                      <div class="text-xs font-bold text-white truncate">${m.name}</div>
+                      <div class="text-[10px] text-slate-500">Ref: ${m.ref}</div>
+                    </div>
+                    <div class="text-right shrink-0">
+                      <div class="text-xs font-black text-teal-300 tabular-nums">${m.value}</div>
+                      <div class="text-[10px] text-slate-400">${m.note}</div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Atenção / Nutrição & Pediatra -->
+            <div class="space-y-2 pt-1">
+              <div class="text-[11px] font-extrabold uppercase tracking-wider text-amber-400">⚠️ Atenção — Nutrição &amp; Revisão com a Pediatra</div>
+              <div class="space-y-2">
+                ${LAB_ATTENTION.map(item => `
+                  <div class="bg-amber-500/8 border border-amber-500/30 rounded-xl p-3 space-y-1">
+                    <div class="flex items-center justify-between gap-2 flex-wrap">
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs font-extrabold text-white">${item.name}</span>
+                        <span class="text-xs font-black text-amber-300 tabular-nums">${item.value}</span>
+                      </div>
+                      <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/35">${item.badge}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-300 leading-relaxed">${item.detail}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </section>
+
+          <!-- Backup & Compartilhamento -->
+          <section class="bg-[#111c33] border border-slate-800 rounded-2xl p-4 space-y-3">
+            <h3 class="text-sm font-extrabold text-white">💾 Backup &amp; Relatório para Pais / Pediatra</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">Os registros ficam salvos automaticamente no aparelho. Faça backup em arquivo ou compartilhe o resumo semanal com um toque.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <button type="button" id="btnShareWeeklyReport" class="py-2.5 px-3 rounded-xl text-xs font-black bg-gradient-to-r from-[#8b5cf6] to-[#14b8a6] text-[#0b1120] active:scale-95">📤 Compartilhar Relatório</button>
+              <button type="button" id="btnExportJson" class="py-2.5 px-3 rounded-xl text-xs font-black bg-[#0b1120] text-teal-300 border border-teal-500/40 active:scale-95">⬇ Exportar Backup (.json)</button>
+              <button type="button" id="btnImportJson" class="py-2.5 px-3 rounded-xl text-xs font-black bg-[#0b1120] text-violet-300 border border-violet-500/40 active:scale-95">⬆ Importar Backup</button>
+            </div>
+          </section>
+        </div>
+      `;
+    }
+
+    function bindEvolucaoEvents() {
+      const volEvo = document.getElementById('btnLogVolFromEvo');
+      if (volEvo) volEvo.addEventListener('click', openLogVolleyballModal);
+
+      const sel = document.getElementById('chartExerciseSelect');
+      if (sel) {
+        sel.addEventListener('change', (e) => {
+          ui.chartExId = e.target.value;
+          renderApp();
+        });
+      }
+
+      document.querySelectorAll('[data-expand-hist]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.expandHist;
+          ui.expandedHistId = ui.expandedHistId === id ? null : id;
+          renderApp();
+        });
+      });
+
+      document.querySelectorAll('[data-share-hist]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const sess = state.sessionHistory.find(s => s.id === btn.dataset.shareHist);
+          if (sess) shareSessionSummary(sess);
+        });
+      });
+
+      document.querySelectorAll('[data-del-hist]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.delHist;
+          openModal({
+            title: 'Excluir registro do histórico?',
+            bodyHtml: '<p class="text-xs text-slate-300">Esta ação remove permanentemente esta sessão salva.</p>',
+            confirmText: 'Excluir',
+            onConfirm: () => {
+              state.sessionHistory = state.sessionHistory.filter(s => s.id !== id);
+              persistState();
+              renderApp();
+              showToast('Registro excluído.', 'info');
+            }
+          });
+        });
+      });
+
+      const bodyForm = document.getElementById('bodyLogForm');
+      if (bodyForm) {
+        bodyForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const date = document.getElementById('bDate').value;
+          const weight = Number(document.getElementById('bWeight').value);
+          const height = Number(document.getElementById('bHeight').value);
+          const bfRaw = document.getElementById('bBf').value;
+          if (!date || !weight) return;
+          state.bodyLogs.push({
+            id: 'body_' + Date.now(),
+            date,
+            weight,
+            height: height || 164,
+            bf: bfRaw ? Number(bfRaw) : '',
+            note: ''
+          });
+          persistState();
+          renderApp();
+          showToast('Registro de crescimento salvo!', 'success');
+        });
+      }
+
+      document.querySelectorAll('[data-del-body]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.bodyLogs = state.bodyLogs.filter(b => b.id !== btn.dataset.delBody);
+          persistState();
+          renderApp();
+        });
+      });
+
+      const shareRep = document.getElementById('btnShareWeeklyReport');
+      if (shareRep) shareRep.addEventListener('click', shareWeeklyReport);
+
+      const expJson = document.getElementById('btnExportJson');
+      if (expJson) expJson.addEventListener('click', exportBackupJSON);
+
+      const impJson = document.getElementById('btnImportJson');
+      if (impJson) impJson.addEventListener('click', () => document.getElementById('importJsonInput').click());
+    }
+
+    /**
+     * ============================================================================
+     * COMPARTILHAMENTO NATIVO (FALLBACK EXEC_COMMAND), BACKUP JSON E GUIA CELULAR
+     * ============================================================================
+     */
+    function copyTextFallback(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-9999px';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    async function shareOrCopyText(title, text) {
+      if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+        try {
+          await navigator.share({ title, text });
+          showToast('Compartilhado com sucesso!', 'success');
+          return;
+        } catch (err) {
+          if (err && err.name === 'AbortError') return;
+        }
+      }
+      if (copyTextFallback(text)) {
+        showToast('Resumo copiado! Agora basta colar no WhatsApp ou Notas.', 'success');
+      } else {
+        showToast('Não foi possível copiar automaticamente.', 'error');
+      }
+    }
+
+    function shareSessionSummary(sess) {
+      if (sess.type === 'volleyball') {
+        const txt = [
+          `🏐 Maria Ester — Treino de Vôlei`,
+          `📅 ${formatShortDateTime(sess.completedAt)} | ⏱ ${Math.round((sess.durationSec || 2400) / 60)} min`,
+          `💪 Esforço: ${sess.effort || 'Moderado'}`,
+          sess.notes ? `📝 Obs: ${sess.notes}` : ''
+        ].filter(Boolean).join('\n');
+        shareOrCopyText('Treino de Vôlei — Maria Ester', txt);
+        return;
+      }
+
+      const lines = [
+        `🏋️ Maria Ester — ${sess.workoutName} (${sess.workoutFocus})`,
+        `📅 ${formatShortDateTime(sess.completedAt)} | ⏱ ${formatMMSS(sess.durationSec)}`,
+        `📊 ${sess.totalSetsDone}/${sess.totalSetsPlanned} séries | Volume: ${Number(sess.totalVolumeKg).toLocaleString('pt-BR')} kg | Esforço: ${sess.effort || 'Moderado'}`,
+        ''
+      ];
+      (sess.exercises || []).forEach((ex, i) => {
+        const setsTxt = ex.sets.filter(st => st.done).map(st =>
+          ex.isTimeBased ? `${st.reps}s` : `${st.kg}kg×${st.reps}`
+        ).join(', ') || 'não feito';
+        lines.push(`${i + 1}. ${ex.executedName}: ${setsTxt}`);
+      });
+      if (sess.notes) lines.push(`\n📝 Obs: ${sess.notes}`);
+      shareOrCopyText(`Treino Concluído — ${sess.workoutName}`, lines.join('\n'));
+    }
+
+    function shareWeeklyReport() {
+      const week = getWeeklyCounts();
+      const sortedBody = [...(state.bodyLogs || [])].sort((a, b) => a.date.localeCompare(b.date));
+      const latest = sortedBody[sortedBody.length - 1] || { weight: 59.3, height: 164 };
+      const todayDiet = getTodayDietLog();
+      const mealsDone = Object.values(todayDiet.mealsDone || {}).filter(Boolean).length;
+      const recent = state.sessionHistory.slice(0, 6);
+
+      const lines = [
+        `📋 Relatório Semanal — Maria Ester Fit (12 anos)`,
+        `📅 Gerado em ${formatShortDate(getTodayKey())}`,
+        `🎯 Meta Semana: Musculação ${week.gym}/4 | Vôlei ${week.volleyball}/2`,
+        `📏 Última medição: ${Number(latest.weight).toFixed(1).replace('.', ',')} kg | ${latest.height || 164} cm`,
+        `🥗 Hoje: ${mealsDone}/4 refeições | Água: ${((todayDiet.waterMl || 0) / 1000).toFixed(2).replace('.', ',')} L`,
+        '',
+        '🗂 Últimas sessões:'
+      ];
+      if (recent.length === 0) {
+        lines.push('- Nenhuma sessão registrada ainda.');
+      } else {
+        recent.forEach(s => {
+          const icon = s.type === 'volleyball' ? '🏐' : '🏋️';
+          lines.push(`- ${icon} ${s.workoutName} (${formatShortDate(s.completedAt)}) · ${Math.round((s.durationSec || 0) / 60)} min · Esforço: ${s.effort || 'Moderado'}`);
+        });
+      }
+      shareOrCopyText('Relatório Semanal — Maria Ester Fit', lines.join('\n'));
+    }
+
+    function exportBackupJSON() {
+      try {
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `backup-maria-ester-fit-${getTodayKey()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Backup (.json) baixado com sucesso!', 'success');
+      } catch (err) {
+        showToast('Erro ao exportar backup.', 'error');
+      }
+    }
+
+    function openSmartphoneGuideModal() {
+      openModal({
+        title: '📱 Como Salvar na Tela Inicial do Celular',
+        bodyHtml: `
+          <div class="space-y-3 text-xs text-slate-300 leading-relaxed">
+            <div class="bg-[#0b1120] border border-violet-500/35 rounded-xl p-3.5 space-y-1.5">
+              <div class="font-extrabold text-violet-300">🤖 Samsung / Android — Opção 1 (Mais Completa: Netlify Drop)</div>
+              <ol class="list-decimal list-inside space-y-1">
+                <li>Renomeie o arquivo para <code class="text-teal-300">index.html</code> dentro de uma pasta e envie gratuitamente em <strong>app.netlify.com/drop</strong>.</li>
+                <li>Abra o link <code class="text-teal-300">https://...</code> gerado no <strong>Chrome</strong> ou <strong>Samsung Internet</strong>.</li>
+                <li>Toque no menu <strong>⋮</strong> (ou <strong>☰</strong>) → <strong>Adicionar à tela inicial</strong>.</li>
+                <li>Abre em tela cheia como um app real e libera vídeos internos sem erro!</li>
+              </ol>
+            </div>
+
+            <div class="bg-[#0b1120] border border-teal-500/35 rounded-xl p-3.5 space-y-1.5">
+              <div class="font-extrabold text-teal-300">📂 Samsung / Android — Opção 2 (Rápida: Meus Arquivos)</div>
+              <ol class="list-decimal list-inside space-y-1">
+                <li>Abra o app <strong>Meus Arquivos</strong> (Samsung) → <strong>Downloads</strong>.</li>
+                <li><strong>Segure o dedo</strong> sobre <code class="text-teal-300">maria_ester_fit.html</code>.</li>
+                <li>Toque em <strong>Mais (⋮)</strong> → <strong>Adicionar à tela inicial</strong>.</li>
+              </ol>
+            </div>
+
+            <div class="bg-[#0b1120] border border-slate-700 rounded-xl p-3.5 space-y-1.5">
+              <div class="font-extrabold text-white">🍎 iPhone / iPad (Safari)</div>
+              <ol class="list-decimal list-inside space-y-1">
+                <li>Abra o link hospedado (<code class="text-teal-300">https://...</code> via Netlify Drop) no <strong>Safari</strong>.</li>
+                <li>Toque no botão <strong>Compartilhar</strong> (quadrado com seta para cima).</li>
+                <li>Role para baixo e toque em <strong>Adicionar à Tela de Início</strong> → <strong>Adicionar</strong>.</li>
+              </ol>
+            </div>
+          </div>
+        `,
+        hideConfirm: true,
+        cancelText: 'Entendi'
+      });
+    }
+
+    /**
+     * ============================================================================
+     * RENDERIZAÇÃO GLOBAL E INICIALIZAÇÃO SEGURA
+     * ============================================================================
+     */
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      persistState();
+      renderApp();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateNavStyles() {
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        const active = btn.dataset.tab === state.activeTab;
+        btn.className = `nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+          active ? 'bg-[#8b5cf6] text-white shadow-sm' : 'text-slate-300 hover:text-white'
+        }`;
+      });
+      document.querySelectorAll('.nav-tab-btn-mobile').forEach(btn => {
+        const active = btn.dataset.tab === state.activeTab;
+        btn.className = `nav-tab-btn-mobile flex flex-col items-center justify-center py-2 rounded-xl text-[11px] font-bold transition-all ${
+          active ? 'bg-violet-500/18 text-violet-300 border border-violet-500/40' : 'text-slate-400'
+        }`;
+      });
+    }
+
+    function renderApp() {
+      try {
+        updateNavStyles();
+        const root = document.getElementById('appRoot');
+        if (!root) return;
+
+        if (state.activeTab === 'treino') {
+          root.innerHTML = renderTreinoTab();
+          bindTreinoEvents();
+        } else if (state.activeTab === 'dieta') {
+          root.innerHTML = renderDietaTab();
+          bindDietaEvents();
+        } else {
+          root.innerHTML = renderEvolucaoTab();
+          bindEvolucaoEvents();
+        }
+      } catch (err) {
+        console.error('Erro ao renderizar interface:', err);
+        const root = document.getElementById('appRoot');
+        if (root) {
+          root.innerHTML = `<div class="p-4 rounded-xl bg-rose-500/15 border border-rose-500/40 text-xs text-rose-200">Erro ao carregar interface: ${escapeHtml(err.message)}</div>`;
+        }
+      }
+    }
+
+    function initApp() {
+      loadState();
+
+      document.querySelectorAll('[data-tab]').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+      });
+
+      const installTop = document.getElementById('btnOpenInstallTop');
+      if (installTop) installTop.addEventListener('click', openSmartphoneGuideModal);
+
+      const restAdd = document.getElementById('btnRestAdd15');
+      if (restAdd) {
+        restAdd.addEventListener('click', () => {
+          ui.restRemainingSec += 15;
+          const d = document.getElementById('restTimerDisplay');
+          if (d) d.textContent = formatMMSS(ui.restRemainingSec);
+        });
+      }
+      const restSkip = document.getElementById('btnRestSkip');
+      if (restSkip) restSkip.addEventListener('click', stopRestTimer);
+
+      const mCloseX = document.getElementById('modalCloseX');
+      const mCancel = document.getElementById('modalCancelBtn');
+      const mConfirm = document.getElementById('modalConfirmBtn');
+      const mBackdrop = document.getElementById('appModal');
+
+      if (mCloseX) mCloseX.addEventListener('click', closeModal);
+      if (mCancel) mCancel.addEventListener('click', closeModal);
+      if (mBackdrop) {
+        mBackdrop.addEventListener('click', (e) => {
+          if (e.target.id === 'appModal') closeModal();
+        });
+      }
+      if (mConfirm) {
+        mConfirm.addEventListener('click', () => {
+          const cb = ui.modalConfirmCb;
+          closeModal();
+          if (typeof cb === 'function') cb();
+        });
+      }
+
+      const impInput = document.getElementById('importJsonInput');
+      if (impInput) {
+        impInput.addEventListener('change', (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            try {
+              state = mergeStateSafely(JSON.parse(String(ev.target.result)));
+              persistState();
+              renderApp();
+              showToast('Backup restaurado com sucesso!', 'success');
+            } catch {
+              showToast('Arquivo de backup inválido.', 'error');
+            }
+          };
+          reader.readAsText(file);
+          e.target.value = '';
+        });
+      }
+
+      if (state.activeSession && state.activeSession.running) {
+        ensureRunningSessionTicker();
+      }
+
+      renderApp();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>
